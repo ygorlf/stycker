@@ -1,16 +1,14 @@
-import React from 'react';
+import { observer } from 'mobx-react-lite';
 import { Group, Rect } from 'react-konva';
 
-// Types
-import { StickerProps } from '../../types/stickers';
-
-const Note = (props: StickerProps) => {
+const Note = (props: any) => {
   return (
     <Group
       x={props.x}
       y={props.y}
       width={props.width}
       height={props.height}
+      draggable
     >
       <Rect
         x={0}
@@ -23,4 +21,5 @@ const Note = (props: StickerProps) => {
   )
 };
 
-export default Note;
+// eslint-disable-next-line react-refresh/only-export-components
+export default observer(Note);

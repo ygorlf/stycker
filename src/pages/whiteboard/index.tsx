@@ -1,27 +1,17 @@
-import { useState } from 'react';
 import { Stage, Layer } from 'react-konva';
+import { observer } from 'mobx-react-lite';
 
-// Types
-import { StickerProps } from '../../types/stickers';
+// Store
+import { useStore } from '../../models/root';
 
 import Note from '../../components/stickers/note';
 
 const Whiteboard = () => {
-  const [notes, setNotes] = useState<StickerProps[]>([
-    {
-      type: 'note',
-      x: 10,
-      y: 10,
-      width: 125,
-      height: 140,
-      fill: '#E9E91C'
-    }
-  ]);
+  const { stickersStore } = useStore();
 
   const renderNotes = () => {
-    return notes
-      .filter(note => note.type === 'note')
-      .map((note: StickerProps) => (
+    return stickersStore.notes
+      .map((note) => (
         <Note
           {...note}
         />
@@ -37,4 +27,5 @@ const Whiteboard = () => {
   );
 };
 
-export default Whiteboard;
+// eslint-disable-next-line react-refresh/only-export-components
+export default observer(Whiteboard); 
