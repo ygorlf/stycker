@@ -1,9 +1,18 @@
 import Whiteboard from './pages/whiteboard';
 
+// Stores
+import { initializeStore, Provider } from './models/root';
+
+const store = initializeStore();
+
 const App = () => {
   return (
     <>
-      <Whiteboard />
+      <Provider
+        value={store}
+      >
+        <Whiteboard />
+      </Provider>
     </>
   )
 }
