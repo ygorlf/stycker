@@ -20,6 +20,15 @@ export const initialState = {
       width: 125,
       height: 140,
       fill: '#E9E91C'
+    },
+    '987-654-321': {
+      id: '987-654-321',
+      type: 'note',
+      x: 1100,
+      y: 500,
+      width: 125,
+      height: 140,
+      fill: '#E9E91C'
     }
   }
 };
