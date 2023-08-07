@@ -7,6 +7,7 @@ import { useStore } from '../../models/root';
 
 import Grid from './grid';
 
+import Toolbar from '../../components/toolbar';
 import Note from '../../components/stickers/note';
 
 const minScale = 1;  // You can adjust this value
@@ -112,6 +113,7 @@ const Whiteboard = () => {
           {renderNotes()}
         </Layer>
       </Stage>
+      <Toolbar />
     </div>
   );
 }
