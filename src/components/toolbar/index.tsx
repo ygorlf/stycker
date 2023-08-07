@@ -1,5 +1,9 @@
 import { } from 'react';
+import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
+
+// Store
+import { useStore } from '../../models/root';
 
 import note from '../../assets/icons/note.svg';
 import emoji from '../../assets/icons/emoji.svg';
@@ -41,23 +45,41 @@ const Icon = styled.img`
   height: 35px;
 `;
 
-const Toolbar = () => {
+const Toolbar = observer(() => {
+  const { boardStore } = useStore();
+
   return (
     <Container>
-      <Option>
+      <Option
+        onClick={() => {
+          boardStore.setStickerMode('note');
+        }}
+      >
         <Icon src={note} />
       </Option>
-      <Option>
+      <Option
+         onClick={() => {
+          boardStore.setStickerMode('emoji');
+        }}
+      >
         <Icon src={emoji} />
       </Option>
-      <Option>
+      <Option
+         onClick={() => {
+          boardStore.setStickerMode('image');
+        }}
+      >
         <Icon src={picture} />
       </Option>
-      <Option>
+      <Option
+         onClick={() => {
+          boardStore.setStickerMode('draw');
+        }}
+      >
         <Icon src={draw} />
       </Option>
     </Container>
   )
-};
+});
 
 export default Toolbar;

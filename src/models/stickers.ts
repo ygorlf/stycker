@@ -1,6 +1,6 @@
-import { types } from 'mobx-state-tree';
+import { types, Instance } from 'mobx-state-tree';
 
-export const Sticker = types.model('Sticker', {
+export const StickerModel = types.model('Sticker', {
   id: types.identifier,
   type: types.string,
   x: types.number,
@@ -10,32 +10,15 @@ export const Sticker = types.model('Sticker', {
   fill: types.string,
 });
 
+type StickerType = Instance<typeof StickerModel>;
+
 export const initialState = {
-  stickers: {
-    '123-456-789': {
-      id: '123-456-789',
-      type: 'note',
-      x: 10,
-      y: 10,
-      width: 125,
-      height: 140,
-      fill: '#E9E91C'
-    },
-    '987-654-321': {
-      id: '987-654-321',
-      type: 'note',
-      x: 1100,
-      y: 500,
-      width: 125,
-      height: 140,
-      fill: '#E9E91C'
-    }
-  }
+  stickers: {}
 };
 
 export const StickersModel = types
   .model("StickersStore", {
-    stickers: types.map(Sticker)
+    stickers: types.map(StickerModel)
   })
   .views((self) => ({
     get notes() {
@@ -43,9 +26,10 @@ export const StickersModel = types
     },
   }))
   .actions((self) => {
-
     return {
-
+      addSticker(sticker: StickerType) {
+        self.stickers.set(sticker.id, sticker);
+      }
     }
   });
   
