@@ -1,15 +1,18 @@
 import { createContext, useContext } from 'react';
 import { Instance, types } from 'mobx-state-tree';
 
-import { StickersModel, initialState } from './stickers';
+import { StickersModel, initialState as stickersState } from './stickers';
+import { BoardModel, initialState as boardState } from './board';
 
 export const RootStore = types.model({
+  boardStore: BoardModel,
   stickersStore: StickersModel,
 });
 
 export const initializeStore = () => {
   const _store = RootStore.create({
-    stickersStore: initialState,
+    boardStore: boardState,
+    stickersStore: stickersState,
   });
   return _store;
 }

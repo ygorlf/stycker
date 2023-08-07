@@ -1,6 +1,8 @@
-import { useState, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Stage, Layer } from 'react-konva';
+import { reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
+import { nanoid } from 'nanoid';
 
 // Store
 import { useStore } from '../../models/root';
@@ -10,10 +12,13 @@ import Grid from './grid';
 import Toolbar from '../../components/toolbar';
 import Note from '../../components/stickers/note';
 
+// Images
+import note from '../../assets/icons/note.png';
+
 const minScale = 1;  // You can adjust this value
 const maxScale = 6;    // You can adjust this value too
 
-const Whiteboard = () => {
+const Whiteboard = observer(() => {
   const [stageX, setStageX] = useState(0);
   const [stageY, setStageY] = useState(0);
   const [stageScale, setStageScale] = useState(1);
@@ -21,7 +26,7 @@ const Whiteboard = () => {
   const [stageHeight] = useState(2000);
   const stageRef = useRef(null);
 
-  const { stickersStore } = useStore();
+  const { boardStore, stickersStore } = useStore();
 
   const handleWheel = (e) => {
     e.evt.preventDefault();
@@ -51,7 +56,31 @@ const Whiteboard = () => {
     setStageY(pos.y);
   };
 
-  const boundFunc = (pos: { x: number, y: number}, scale: number) => {
+  const handleClick = (e) => {
+    const stage = e.target.getStage();
+    const oldScale = stage.scaleX();
+
+    const mousePointTo = {
+      x: stage.getPointerPosition().x / oldScale - stage.x() / oldScale,
+      y: stage.getPointerPosition().y / oldScale - stage.y() / oldScale
+    };
+
+    if (boardStore.stickerMode === 'note') {
+      const newSticker = {
+        id: nanoid(10),
+        type: 'note',
+        width: 125,
+        height: 140,
+        fill: '#E9E91C',
+        ...mousePointTo,
+      };
+
+      stickersStore.addSticker(newSticker);
+      boardStore.setStickerMode('none');
+    }
+  }
+
+  const boundFunc = (pos: { x: number, y: number }, scale: number) => {
     // Assuming viewport width and height are the same as the initial stageWidth and stageHeight.
 
     // Calculate the scaled width and height of the stage.
@@ -73,9 +102,32 @@ const Whiteboard = () => {
     };
   };
 
-  const dragBoundFunc = (pos: { x: number, y: number}) => {
+  const dragBoundFunc = (pos: { x: number, y: number }) => {
     return boundFunc(pos, stageScale);
   };
+
+  const handleCursorChange = (mode: string) => {
+    switch (mode) {
+      case 'note':
+        document.body.style.cursor = `url(${note}), default`;
+        break;
+      default:
+        document.body.style.cursor = `initial`;
+    }
+  };
+
+  useEffect(() => {
+    const cursorReaction = reaction(
+      () => boardStore.stickerMode,
+      () => {
+        handleCursorChange(boardStore.stickerMode);
+      }
+    );
+
+    return () => {
+      cursorReaction();
+    }
+  }, []);
 
   const renderNotes = () => {
     return stickersStore.notes
@@ -100,6 +152,7 @@ const Whiteboard = () => {
         width={stageWidth}
         height={stageHeight}
         onWheel={handleWheel}
+        onClick={handleClick}
         draggable
         dragBoundFunc={dragBoundFunc}
       >
@@ -116,6 +169,6 @@ const Whiteboard = () => {
       <Toolbar />
     </div>
   );
-}
+})
 
-export default observer(Whiteboard);
+export default Whiteboard;
