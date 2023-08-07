@@ -24,6 +24,9 @@ export const StickersModel = types
     get notes() {
       return Array.from(self.stickers.values())
     },
+    get ids() {
+      return Array.from(self.stickers.keys());
+    }
   }))
   .actions((self) => {
     return {
