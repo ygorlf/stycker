@@ -1,25 +1,37 @@
 import { observer } from 'mobx-react-lite';
 import { Group, Rect } from 'react-konva';
 
-const Note = (props: any) => {
+// Store
+import { useStore } from '../../models/root';
+
+interface NoteProps {
+  id: string;
+}
+
+const Note = observer((props: NoteProps) => {
+  const { stickersStore } = useStore();
+
+  const attrs = stickersStore.stickers.get(props.id);
+
+  if (!attrs) return null;
+
   return (
     <Group
-      x={props.x}
-      y={props.y}
-      width={props.width}
-      height={props.height}
+      x={attrs.x}
+      y={attrs.y}
+      width={attrs.width}
+      height={attrs.height}
       draggable
     >
       <Rect
         x={0}
         y={0}
-        width={props.width}
-        height={props.height}
-        fill={props.fill}
+        width={attrs.width}
+        height={attrs.height}
+        fill={attrs.fill}
       />
     </Group>
   )
-};
+});
 
-// eslint-disable-next-line react-refresh/only-export-components
-export default observer(Note);
+export default Note;

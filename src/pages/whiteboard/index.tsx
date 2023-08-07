@@ -70,8 +70,8 @@ const Whiteboard = observer(() => {
         id: nanoid(10),
         type: 'note',
         width: 125,
-        height: 140,
-        fill: '#E9E91C',
+        height: 125,
+        fill: '#FFFF88',
         ...mousePointTo,
       };
 
@@ -130,10 +130,11 @@ const Whiteboard = observer(() => {
   }, []);
 
   const renderNotes = () => {
-    return stickersStore.notes
-      .map((note) => (
+    return stickersStore.ids
+      .map((id: string) => (
         <Note
-          {...note}
+          id={id}
+          key={id}
         />
       ))
   }
