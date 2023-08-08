@@ -16,21 +16,41 @@ import Note from '../../components/stickers/note';
 import note from '../../assets/icons/note.png';
 
 const minScale = 1;  // You can adjust this value
-const maxScale = 6;    // You can adjust this value too
+const maxScale = 8;    // You can adjust this value too
+const scaleBy = 1.15;
 
 const Whiteboard = observer(() => {
-  const [stageX, setStageX] = useState(0);
-  const [stageY, setStageY] = useState(0);
-  const [stageScale, setStageScale] = useState(1);
   const [stageWidth] = useState(4000);
   const [stageHeight] = useState(2000);
   const stageRef = useRef(null);
 
   const { boardStore, stickersStore } = useStore();
 
+  const handleDragStart = (e) => {
+    e.evt.stopPropagation();
+  };
+
+  const handleDragMove = (e) => {
+    e.evt.stopPropagation();
+  };
+
+  const handleDragEnd = (e) => {
+    e.evt.stopPropagation();
+
+    const position = {
+      x: e.target.x(),
+      y: e.target.y()
+    };
+
+    boardStore.setBoardBounds({
+      ...position,
+      scaleX: stageRef.current.scaleX(),
+      scaleY: stageRef.current.scaleY()
+    });
+  };
+
   const handleWheel = (e) => {
     e.evt.preventDefault();
-    const scaleBy = 1.15;
     const stage = e.target.getStage();
     const oldScale = stage.scaleX();
 
@@ -51,9 +71,12 @@ const Whiteboard = observer(() => {
 
     const pos = boundFunc({ x, y }, newScale);
 
-    setStageScale(newScale);
-    setStageX(pos.x);
-    setStageY(pos.y);
+    boardStore.setBoardBounds({
+      x: pos.x,
+      y: pos.y,
+      scaleX: newScale,
+      scaleY: newScale
+    });
   };
 
   const handleClick = (e) => {
@@ -103,7 +126,7 @@ const Whiteboard = observer(() => {
   };
 
   const dragBoundFunc = (pos: { x: number, y: number }) => {
-    return boundFunc(pos, stageScale);
+    return boundFunc(pos, boardStore.boardBounds.scaleX);
   };
 
   const handleCursorChange = (mode: string) => {
@@ -139,6 +162,8 @@ const Whiteboard = observer(() => {
       ))
   }
 
+  const { boardBounds } = boardStore;
+
   return (
     <div
       style={{ width: '100vw', height: '100vh' }}
@@ -146,14 +171,17 @@ const Whiteboard = observer(() => {
       <Stage
         ref={stageRef}
         style={{ width: stageWidth, height: stageHeight }}
-        x={stageX}
-        y={stageY}
-        scaleX={stageScale}
-        scaleY={stageScale}
+        x={boardBounds.x}
+        y={boardBounds.y}
+        scaleX={boardBounds.scaleX}
+        scaleY={boardBounds.scaleY}
         width={stageWidth}
         height={stageHeight}
         onWheel={handleWheel}
         onClick={handleClick}
+        onDragStart={handleDragStart}
+        onDragMove={handleDragMove}
+        onDragEnd={handleDragEnd}
         draggable
         dragBoundFunc={dragBoundFunc}
       >
@@ -161,7 +189,7 @@ const Whiteboard = observer(() => {
           viewRect={{ x1: 0, y1: 0, x2: stageWidth, y2: stageHeight }}
           gridFullRect={{ x1: 0, y1: 0, x2: stageWidth, y2: stageHeight }}
           stepSize={100}
-          scale={stageScale}
+          scale={boardBounds.scaleX}
         />
         <Layer>
           {renderNotes()}
