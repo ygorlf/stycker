@@ -32,6 +32,16 @@ export const StickersModel = types
     return {
       addSticker(sticker: StickerType) {
         self.stickers.set(sticker.id, sticker);
+      },
+      updateStickerPosition(newAttrs: { id: string, x: number, y: number}) {
+        const reference = self.stickers.get(newAttrs.id);
+
+        if (reference) {
+          self.stickers.put({
+            ...reference,
+            ...newAttrs
+          });
+        }
       }
     }
   });
