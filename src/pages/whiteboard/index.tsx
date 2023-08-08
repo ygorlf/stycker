@@ -94,6 +94,7 @@ const Whiteboard = observer(() => {
         type: 'note',
         width: 125,
         height: 125,
+        text: 'New Note!',
         fill: '#FFFF88',
         ...mousePointTo,
       };
