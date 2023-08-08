@@ -7,6 +7,7 @@ export const StickerModel = types.model('Sticker', {
   y: types.number,
   width: types.number,
   height: types.number,
+  text: types.string,
   fill: types.string,
 });
 

@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite';
-import { Group, Rect } from 'react-konva';
+import { Group, Rect, Text } from 'react-konva';
 
 // Store
 import { useStore } from '../../models/root';
@@ -56,6 +56,16 @@ const Note = observer((props: NoteProps) => {
         width={attrs.width}
         height={attrs.height}
         fill={attrs.fill}
+      />
+      <Text
+        x={attrs.width * 0.05}
+        width={attrs.width * 0.9}
+        height={attrs.height}
+        text={attrs.text}
+        fontSize={20}
+        fontFamily='Montserrat'
+        align='center'
+        verticalAlign='middle'
       />
     </Group>
   )
