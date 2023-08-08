@@ -9,25 +9,30 @@ interface NoteProps {
 }
 
 const Note = observer((props: NoteProps) => {
-  const { stickersStore } = useStore();
+  const { boardStore, stickersStore } = useStore();
 
   const handleDragStart = (e) => {
-    e.evt.stopPropagation();
+    e.cancelBubble = true;
   };
 
   const handleDragMove = (e) => {
-    e.evt.stopPropagation();
+    e.cancelBubble = true;
   }
 
   const handleDragEnd = (e) => {
-    e.evt.stopPropagation();
+    e.cancelBubble = true;
 
     const position = {
-      x: e.target.x(),
-      y: e.target.y()
+      x: ((e.target.getAbsolutePosition().x - boardStore.boardBounds.x)
+        / boardStore.boardBounds.scaleX),
+      y: ((e.target.getAbsolutePosition().y - boardStore.boardBounds.y)
+      / boardStore.boardBounds.scaleY)
     };
 
-    console.log(position);
+    stickersStore.updateStickerPosition({
+      id: props.id,
+      ...position,
+    });
   }
 
   const attrs = stickersStore.stickers.get(props.id);
