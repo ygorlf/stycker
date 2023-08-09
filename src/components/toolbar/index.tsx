@@ -1,6 +1,7 @@
-import { } from 'react';
+import { useRef } from 'react';
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
+import { nanoid } from 'nanoid';
 
 // Store
 import { useStore } from '../../models/root';
@@ -45,40 +46,95 @@ const Icon = styled.img`
   height: 35px;
 `;
 
+const GhostInput = styled.input`
+  width: 0;
+  height: 0;
+  border: none;
+  cursor: none;
+  outline: none;
+  background: none;
+`;
+
 const Toolbar = observer(() => {
-  const { boardStore } = useStore();
+  const { boardStore, stickersStore } = useStore();
+
+  const inputImageRef = useRef<HTMLInputElement>(null);
+
+  const createImageSticker = (base64: string) => {
+    const { x, y, scaleX } = boardStore.boardBounds;
+
+    const position = {
+      x: 10 / scaleX - x / scaleX,
+      y: 10 / scaleX - y / scaleX
+    };
+
+    const sticker = {
+      id: nanoid(10),
+      type: 'photo',
+      width: 125,
+      height: 125,
+      base64,
+      fill: null,
+      text: null,
+      ...position,
+    };
+
+    stickersStore.addSticker(sticker);
+  }
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+
+    const filereader = new FileReader();
+
+    filereader.onload = function (evt) {
+      const base64 = evt?.target?.result as string;
+      createImageSticker(base64);
+    };
+
+    filereader.readAsDataURL(file);
+  };
 
   return (
-    <Container>
-      <Option
-        onClick={() => {
-          boardStore.setStickerMode('note');
-        }}
-      >
-        <Icon src={note} />
-      </Option>
-      {/* <Option
-         onClick={() => {
-          boardStore.setStickerMode('emoji');
-        }}
-      >
-        <Icon src={emoji} />
-      </Option> */}
-      <Option
-         onClick={() => {
-          boardStore.setStickerMode('image');
-        }}
-      >
-        <Icon src={picture} />
-      </Option>
-      <Option
-         onClick={() => {
-          boardStore.setStickerMode('draw');
-        }}
-      >
-        <Icon src={draw} />
-      </Option>
-    </Container>
+    <>
+      <Container>
+        <Option
+          onClick={() => {
+            boardStore.setStickerMode('note');
+          }}
+        >
+          <Icon src={note} />
+        </Option>
+        {/* <Option
+          onClick={() => {
+            boardStore.setStickerMode('emoji');
+          }}
+        >
+          <Icon src={emoji} />
+        </Option> */}
+        <Option
+          onClick={() => {
+            boardStore.setStickerMode('image');
+            inputImageRef.current?.click();
+          }}
+        >
+          <Icon src={picture} />
+        </Option>
+        <Option
+          onClick={() => {
+            boardStore.setStickerMode('draw');
+          }}
+        >
+          <Icon src={draw} />
+        </Option>
+      </Container>
+      <GhostInput
+        ref={inputImageRef}
+        type='file'
+        accept='image/png, image/gif, image/jpeg'
+        onChange={handleImageUpload}
+      />
+    </>
   )
 });
 
