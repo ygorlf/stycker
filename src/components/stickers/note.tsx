@@ -30,6 +30,8 @@ const Note = observer((props: NoteProps) => {
 
     const pos = e.target.parent.getAbsolutePosition(); // Get the absolute position of the group, by defaukt the text element will be the target
 
+    stickersStore.updateSelectedStickers([]);
+
     stickersStore.setEditableSticker({
       id: props.id,
       text: attrs?.text,
@@ -65,6 +67,10 @@ const Note = observer((props: NoteProps) => {
 
   if (!attrs) return null;
 
+  const isSelected = stickersStore.selectedStickers.filter(
+    sticker => sticker.id === props.id
+  ).length > 0;
+
   return (
     <Group
       x={attrs.x}
@@ -78,6 +84,16 @@ const Note = observer((props: NoteProps) => {
       onClick={handleClick}
       onDblClick={handleDoubleClick}
     >
+      {isSelected && (
+        <Rect
+          x={-2}
+          y={-2}
+          width={attrs.width + 4}
+          height={attrs.height + 4}
+          stroke={'#000'}
+          strokeWidth={0.5}
+        />
+      )}
       <Rect
         x={0}
         y={0}
