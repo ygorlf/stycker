@@ -1,4 +1,5 @@
 import { types, Instance, cast } from 'mobx-state-tree';
+import { computedFn } from 'mobx-utils';
 
 export const StickerModel = types.model('Sticker', {
   id: types.identifier,
@@ -7,8 +8,9 @@ export const StickerModel = types.model('Sticker', {
   y: types.number,
   width: types.number,
   height: types.number,
-  text: types.string,
-  fill: types.string,
+  text: types.maybeNull(types.string),
+  fill: types.maybeNull(types.string),
+  base64: types.maybeNull(types.string)
 });
 
 const SelectedStickerModel = types.model('SelectedStickerModel', {
@@ -47,19 +49,26 @@ export const StickersModel = types
     stickers: types.map(StickerModel)
   })
   .views((self) => ({
-    get notes() {
+    // get notes() {
+    //   return Array.from(self.stickers.values())
+    // },
+    photosIds: computedFn(function getNotes() {
       return Array.from(self.stickers.values())
-    },
-    get ids() {
-      return Array.from(self.stickers.keys());
-    }
+        .filter(sticker => sticker.type === 'photo')
+        .map(sticker => sticker.id);
+    }),
+    notesIds: computedFn(function getNotes() {
+      return Array.from(self.stickers.values())
+        .filter(sticker => sticker.type === 'note')
+        .map(sticker => sticker.id);
+    }),
   }))
   .actions((self) => {
     return {
       addSticker(sticker: StickerType) {
         self.stickers.set(sticker.id, sticker);
       },
-      updateStickerPosition(newAttrs: { id: string, x: number, y: number}) {
+      updateStickerPosition(newAttrs: { id: string, x: number, y: number }) {
         const reference = self.stickers.get(newAttrs.id);
 
         if (reference) {
@@ -69,7 +78,7 @@ export const StickersModel = types
           });
         }
       },
-      updateStickerText(newAttrs: { id: string, text: string}) {
+      updateStickerText(newAttrs: { id: string, text: string }) {
         const reference = self.stickers.get(newAttrs.id);
 
         if (reference) {
@@ -87,7 +96,7 @@ export const StickersModel = types
       }
     }
   });
-  
+
 
 // export const StickersStore = StickersModel.create({
 //   ...initialState,

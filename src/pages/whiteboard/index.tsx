@@ -9,8 +9,10 @@ import { useStore } from '../../models/root';
 
 import Grid from './grid';
 
-import Toolbar from '../../components/toolbar';
 import Note from '../../components/stickers/note';
+import Photo from '../../components/stickers/photo';
+
+import Toolbar from '../../components/toolbar';
 import Editor from '../../components/stickers/editor';
 
 // Images
@@ -116,6 +118,7 @@ const Whiteboard = observer(() => {
         height: 125,
         text: 'New Note!',
         fill: '#FFFF88',
+        base64: null,
         ...mousePointTo,
       };
 
@@ -182,9 +185,19 @@ const Whiteboard = observer(() => {
   }, []);
 
   const renderNotes = () => {
-    return stickersStore.ids
+    return stickersStore.notesIds()
       .map((id: string) => (
         <Note
+          id={id}
+          key={id}
+        />
+      ))
+  }
+
+  const renderPhotos = () => {
+    return stickersStore.photosIds()
+      .map((id: string) => (
+        <Photo
           id={id}
           key={id}
         />
@@ -223,6 +236,7 @@ const Whiteboard = observer(() => {
         />
         <Layer>
           {renderNotes()}
+          {renderPhotos()}
         </Layer>
       </Stage>
       <Toolbar />
