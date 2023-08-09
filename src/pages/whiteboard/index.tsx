@@ -11,6 +11,7 @@ import Grid from './grid';
 
 import Toolbar from '../../components/toolbar';
 import Note from '../../components/stickers/note';
+import Editor from '../../components/stickers/editor';
 
 // Images
 import note from '../../assets/icons/note.png';
@@ -28,6 +29,15 @@ const Whiteboard = observer(() => {
 
   const handleDragStart = (e) => {
     e.evt.stopPropagation();
+
+    // Make sure to deselect any object on move
+    stickersStore.setEditableSticker({
+      id: '',
+      text: '',
+      x: 0,
+      y: 0,
+    });
+    stickersStore.updateSelectedStickers([]);
   };
 
   const handleDragMove = (e) => {
@@ -51,6 +61,16 @@ const Whiteboard = observer(() => {
 
   const handleWheel = (e) => {
     e.evt.preventDefault();
+
+    // Make sure to deselect any object on zoom
+    stickersStore.setEditableSticker({
+      id: '',
+      text: '',
+      x: 0,
+      y: 0,
+    });
+    stickersStore.updateSelectedStickers([]);
+
     const stage = e.target.getStage();
     const oldScale = stage.scaleX();
 
@@ -102,6 +122,14 @@ const Whiteboard = observer(() => {
       stickersStore.addSticker(newSticker);
       boardStore.setStickerMode('none');
     }
+
+    stickersStore.setEditableSticker({
+      id: '',
+      text: '',
+      x: 0,
+      y: 0,
+    });
+    stickersStore.updateSelectedStickers([]);
   }
 
   const boundFunc = (pos: { x: number, y: number }, scale: number) => {
@@ -164,6 +192,7 @@ const Whiteboard = observer(() => {
   }
 
   const { boardBounds } = boardStore;
+  const { editableSticker } = stickersStore;
 
   return (
     <div
@@ -197,6 +226,9 @@ const Whiteboard = observer(() => {
         </Layer>
       </Stage>
       <Toolbar />
+      {editableSticker.id && (
+        <Editor />
+      )}
     </div>
   );
 })

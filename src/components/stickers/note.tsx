@@ -11,6 +11,32 @@ interface NoteProps {
 const Note = observer((props: NoteProps) => {
   const { boardStore, stickersStore } = useStore();
 
+  const handleClick = (e) => {
+    e.cancelBubble = true;
+
+    const pos = e.target.parent.getAbsolutePosition(); // Get the absolute position of the group, by defaukt the text element will be the target
+
+    stickersStore.updateSelectedStickers([{
+      type: 'select',
+      id: props.id,
+      ...pos,
+    }]);
+  };
+
+  const handleDoubleClick = (e) => {
+    e.cancelBubble = true;
+
+    const attrs = stickersStore.stickers.get(props.id);
+
+    const pos = e.target.parent.getAbsolutePosition(); // Get the absolute position of the group, by defaukt the text element will be the target
+
+    stickersStore.setEditableSticker({
+      id: props.id,
+      text: attrs?.text,
+      ...pos,
+    });
+  };
+
   const handleDragStart = (e) => {
     e.cancelBubble = true;
   };
@@ -26,7 +52,7 @@ const Note = observer((props: NoteProps) => {
       x: ((e.target.getAbsolutePosition().x - boardStore.boardBounds.x)
         / boardStore.boardBounds.scaleX),
       y: ((e.target.getAbsolutePosition().y - boardStore.boardBounds.y)
-      / boardStore.boardBounds.scaleY)
+        / boardStore.boardBounds.scaleY)
     };
 
     stickersStore.updateStickerPosition({
@@ -49,6 +75,8 @@ const Note = observer((props: NoteProps) => {
       onDragStart={handleDragStart}
       onDragMove={handleDragMove}
       onDragEnd={handleDragEnd}
+      onClick={handleClick}
+      onDblClick={handleDoubleClick}
     >
       <Rect
         x={0}
@@ -63,6 +91,7 @@ const Note = observer((props: NoteProps) => {
         height={attrs.height}
         text={attrs.text}
         fontSize={20}
+        fill='#505050'
         fontFamily='Montserrat'
         align='center'
         verticalAlign='middle'
