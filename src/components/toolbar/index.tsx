@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { useStore } from '../../models/root';
 
 import note from '../../assets/icons/note.svg';
-import emoji from '../../assets/icons/emoji.svg';
+// import emoji from '../../assets/icons/emoji.svg';
 import picture from '../../assets/icons/picture.svg';
 import draw from '../../assets/icons/draw.svg';
 
@@ -57,13 +57,13 @@ const Toolbar = observer(() => {
       >
         <Icon src={note} />
       </Option>
-      <Option
+      {/* <Option
          onClick={() => {
           boardStore.setStickerMode('emoji');
         }}
       >
         <Icon src={emoji} />
-      </Option>
+      </Option> */}
       <Option
          onClick={() => {
           boardStore.setStickerMode('image');

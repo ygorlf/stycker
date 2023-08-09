@@ -1,4 +1,4 @@
-import { types, Instance } from 'mobx-state-tree';
+import { types, Instance, cast } from 'mobx-state-tree';
 
 export const StickerModel = types.model('Sticker', {
   id: types.identifier,
@@ -11,14 +11,39 @@ export const StickerModel = types.model('Sticker', {
   fill: types.string,
 });
 
+const SelectedStickerModel = types.model('SelectedStickerModel', {
+  type: types.string,
+  id: types.string,
+  x: types.number,
+  y: types.number,
+});
+
+const EditableStickerModel = types.model('EditableSticker', {
+  id: types.string,
+  x: types.number,
+  y: types.number,
+  text: types.string,
+});
+
 type StickerType = Instance<typeof StickerModel>;
+type SelectedStickerType = Instance<typeof SelectedStickerModel>;
+type EditableStickerType = Instance<typeof EditableStickerModel>
 
 export const initialState = {
+  editableSticker: {
+    id: '',
+    x: 0,
+    y: 0,
+    text: ''
+  },
+  selectedStickers: [],
   stickers: {}
 };
 
 export const StickersModel = types
-  .model("StickersStore", {
+  .model('StickersStore', {
+    editableSticker: EditableStickerModel,
+    selectedStickers: types.array(SelectedStickerModel),
     stickers: types.map(StickerModel)
   })
   .views((self) => ({
@@ -43,6 +68,22 @@ export const StickersModel = types
             ...newAttrs
           });
         }
+      },
+      updateStickerText(newAttrs: { id: string, text: string}) {
+        const reference = self.stickers.get(newAttrs.id);
+
+        if (reference) {
+          self.stickers.put({
+            ...reference,
+            ...newAttrs
+          });
+        }
+      },
+      updateSelectedStickers(selectedStickers: SelectedStickerType[]) {
+        self.selectedStickers = cast(selectedStickers);
+      },
+      setEditableSticker(editableSticker: EditableStickerType) {
+        self.editableSticker = editableSticker;
       }
     }
   });
