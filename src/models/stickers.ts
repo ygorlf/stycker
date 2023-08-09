@@ -100,6 +100,11 @@ export const StickersModel = types
           }
         })
       },
+      deleteStickers(stickers: SelectedStickerType[]) {
+        stickers.forEach((sticker) => {
+          self.stickers.delete(sticker.id);
+        })
+      },
       updateSelectedStickers(selectedStickers: SelectedStickerType[]) {
         self.selectedStickers = cast(selectedStickers);
       },

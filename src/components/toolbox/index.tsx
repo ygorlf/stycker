@@ -1,8 +1,9 @@
-import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 
 import { useStore } from '../../models/root';
+
+import trash from '../../assets/icons/trash.svg';
 
 interface ColorItemProps {
   background: string;
@@ -12,8 +13,10 @@ const Container = styled.div`
   position: fixed;
   top: 1rem;
   left: 50%;
+  display: flex;
+  align-items: center;
   height: 2.75rem;
-  padding: 0 0.5rem;
+  padding: 0 0.75rem;
   border-radius: 1.25rem;
 
   transform: translateX(-50%);
@@ -42,6 +45,16 @@ const ColorItem = styled.li<ColorItemProps>`
   }
 `;
 
+const Delete = styled.button`
+  width: 1.75rem;
+  height: 1.75rem;
+  margin: 0 0 0 1.5rem;
+  border: none;
+  cursor: pointer;
+  background: url(${trash}) no-repeat center;
+  background-size: contain;
+`;
+
 const COLORS = [
   '#ff7eb9',
   '#7afcff',
@@ -55,6 +68,11 @@ const Toolbox = observer(() => {
 
   const handleColorChange = (color: string) => {
     stickersStore.updateStickersColor(stickersStore.selectedStickers, color);
+  };
+
+  const handleDelete = () => {
+    stickersStore.deleteStickers(stickersStore.selectedStickers);
+    stickersStore.updateSelectedStickers([]);
   };
 
   const renderColors = () => {
@@ -73,6 +91,9 @@ const Toolbox = observer(() => {
       <ColorList>
         {renderColors()}
       </ColorList>
+      <Delete
+        onClick={handleDelete}
+      />
     </Container>
   )
 })
