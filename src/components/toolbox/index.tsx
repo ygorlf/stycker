@@ -20,7 +20,7 @@ const Container = styled.div`
   border-radius: 1.25rem;
 
   transform: translateX(-50%);
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.25);
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
   background: snow;
 `;
 
@@ -36,23 +36,26 @@ const ColorList = styled.ul`
 const ColorItem = styled.li<ColorItemProps>`
   width: 1.75rem;
   height: 1.75rem;
+  margin-right: 0.5rem;
   border-radius: 50%;
   cursor: pointer;
   background: ${props => props.background};
-
-  &:not(:last-child) {
-    margin-right: 0.5rem;
-  }
 `;
 
 const Delete = styled.button`
   width: 1.75rem;
   height: 1.75rem;
-  margin: 0 0 0 1.5rem;
   border: none;
   cursor: pointer;
   background: url(${trash}) no-repeat center;
   background-size: contain;
+`;
+
+const Separator = styled.div`
+  width: 0.5px;
+  height: 1.75rem;
+  margin: 0 .75rem;
+  background: #D09CFA;
 `;
 
 const COLORS = [
@@ -91,6 +94,7 @@ const Toolbox = observer(() => {
       <ColorList>
         {renderColors()}
       </ColorList>
+      <Separator />
       <Delete
         onClick={handleDelete}
       />
