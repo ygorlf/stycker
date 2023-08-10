@@ -16,6 +16,8 @@ import Toolbar from '../../components/toolbar';
 import Toolbox from '../../components/toolbox';
 import Editor from '../../components/stickers/editor';
 
+import Copyright from '../../components/copyright';
+
 // Images
 import note from '../../assets/icons/note.png';
 
@@ -247,6 +249,7 @@ const Whiteboard = observer(() => {
       {editableSticker.id && (
         <Editor />
       )}
+      <Copyright />
     </div>
   );
 })
