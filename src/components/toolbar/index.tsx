@@ -20,7 +20,7 @@ const Container = styled.div`
   width: 5rem;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
-  background: #ffd5ff;
+  background: #e5b8f4;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
   transform: translateY(-50%);
 `;

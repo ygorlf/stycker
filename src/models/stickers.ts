@@ -88,6 +88,23 @@ export const StickersModel = types
           });
         }
       },
+      updateStickersColor(stickers: SelectedStickerType[], color: string) {
+        stickers.forEach((sticker) => {
+          const reference = self.stickers.get(sticker.id);
+
+          if (reference) {
+            self.stickers.put({
+              ...reference,
+              fill: color
+            });
+          }
+        })
+      },
+      deleteStickers(stickers: SelectedStickerType[]) {
+        stickers.forEach((sticker) => {
+          self.stickers.delete(sticker.id);
+        })
+      },
       updateSelectedStickers(selectedStickers: SelectedStickerType[]) {
         self.selectedStickers = cast(selectedStickers);
       },

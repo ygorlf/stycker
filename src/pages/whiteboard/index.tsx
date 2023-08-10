@@ -13,6 +13,7 @@ import Note from '../../components/stickers/note';
 import Photo from '../../components/stickers/photo';
 
 import Toolbar from '../../components/toolbar';
+import Toolbox from '../../components/toolbox';
 import Editor from '../../components/stickers/editor';
 
 // Images
@@ -205,7 +206,7 @@ const Whiteboard = observer(() => {
   }
 
   const { boardBounds } = boardStore;
-  const { editableSticker } = stickersStore;
+  const { selectedStickers, editableSticker } = stickersStore;
 
   return (
     <div
@@ -240,6 +241,9 @@ const Whiteboard = observer(() => {
         </Layer>
       </Stage>
       <Toolbar />
+      {selectedStickers.length > 0 && (
+        <Toolbox />
+      )}
       {editableSticker.id && (
         <Editor />
       )}
