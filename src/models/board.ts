@@ -27,9 +27,6 @@ export const BoardModel = types
     stickerMode: types.string,
   })
   .views((self) => ({
-    get bosrBounds() {
-      return self.boardBounds;
-    }
   }))
   .actions((self) => {
     return {

@@ -10,7 +10,8 @@ export const StickerModel = types.model('Sticker', {
   height: types.number,
   text: types.maybeNull(types.string),
   fill: types.maybeNull(types.string),
-  base64: types.maybeNull(types.string)
+  base64: types.maybeNull(types.string),
+  path: types.maybeNull(types.string)
 });
 
 const SelectedStickerModel = types.model('SelectedStickerModel', {
@@ -52,7 +53,7 @@ export const StickersModel = types
     // get notes() {
     //   return Array.from(self.stickers.values())
     // },
-    photosIds: computedFn(function getNotes() {
+    photosIds: computedFn(function getPhotos() {
       return Array.from(self.stickers.values())
         .filter(sticker => sticker.type === 'photo')
         .map(sticker => sticker.id);
@@ -60,6 +61,11 @@ export const StickersModel = types
     notesIds: computedFn(function getNotes() {
       return Array.from(self.stickers.values())
         .filter(sticker => sticker.type === 'note')
+        .map(sticker => sticker.id);
+    }),
+    drawsIds: computedFn(function getDraws() {
+      return Array.from(self.stickers.values())
+        .filter(sticker => sticker.type === 'draw')
         .map(sticker => sticker.id);
     }),
   }))

@@ -11,15 +11,19 @@ import Grid from './grid';
 
 import Note from '../../components/stickers/note';
 import Photo from '../../components/stickers/photo';
+import Draw from '../../components/stickers/draw';
 
 import Toolbar from '../../components/toolbar';
 import Toolbox from '../../components/toolbox';
 import Editor from '../../components/stickers/editor';
 
+import DrawLayer from './drawLayer';
+
 import Copyright from '../../components/copyright';
 
 // Images
 import note from '../../assets/icons/note.png';
+import draw from '../../assets/icons/draw.png';
 
 const minScale = 1;  // You can adjust this value
 const maxScale = 8;    // You can adjust this value too
@@ -122,6 +126,7 @@ const Whiteboard = observer(() => {
         text: 'New Note!',
         fill: '#FFFF88',
         base64: null,
+        path: null,
         ...mousePointTo,
       };
 
@@ -169,6 +174,9 @@ const Whiteboard = observer(() => {
       case 'note':
         document.body.style.cursor = `url(${note}), default`;
         break;
+      case 'draw':
+        document.body.style.cursor = `url(${draw}) 0 30, auto`;
+        break;
       default:
         document.body.style.cursor = `initial`;
     }
@@ -207,6 +215,16 @@ const Whiteboard = observer(() => {
       ))
   }
 
+  const renderDraws = () => {
+    return stickersStore.drawsIds()
+    .map((id: string) => (
+      <Draw
+        key={id}
+        id={id}
+      />
+    ))
+  }
+
   const { boardBounds } = boardStore;
   const { selectedStickers, editableSticker } = stickersStore;
 
@@ -240,14 +258,18 @@ const Whiteboard = observer(() => {
         <Layer>
           {renderNotes()}
           {renderPhotos()}
+          {renderDraws()}
         </Layer>
       </Stage>
+      {editableSticker.id && (
+        <Editor />
+      )}
       <Toolbar />
       {selectedStickers.length > 0 && (
         <Toolbox />
       )}
-      {editableSticker.id && (
-        <Editor />
+      {boardStore.stickerMode === 'draw' && (
+        <DrawLayer />
       )}
       <Copyright />
     </div>
