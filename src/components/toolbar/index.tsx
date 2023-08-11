@@ -76,6 +76,7 @@ const Toolbar = observer(() => {
       base64,
       fill: null,
       text: null,
+      path: null,
       ...position,
     };
 
