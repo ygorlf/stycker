@@ -78,6 +78,12 @@ const Note = observer((props: NoteProps) => {
       width={attrs.width}
       height={attrs.height}
       draggable
+      onMouseEnter={() => {
+        document.body.style.cursor = 'pointer';
+      }}
+      onMouseLeave={() => {
+        document.body.style.cursor = 'initial';
+      }}
       onDragStart={handleDragStart}
       onDragMove={handleDragMove}
       onDragEnd={handleDragEnd}
