@@ -66,7 +66,7 @@ const DrawLayer = observer(() => {
       width: 125,
       height: 125,
       text: 'New Note!',
-      fill: '#FFFF88',
+      fill: '#000',
       path,
       base64: null,
       // ...mousePointTo,

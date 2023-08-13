@@ -66,7 +66,7 @@ const Draw = observer((props: DrawProps) => {
         x={0}
         y={0}
         data={attrs.path}
-        fill='black'
+        fill={attrs.fill || '#000'}
       />
     </Group>
   )
