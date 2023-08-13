@@ -75,6 +75,12 @@ const Photo = observer((props: PhotoProps) => {
       x={attrs.x}
       y={attrs.y}
       draggable
+      onMouseEnter={() => {
+        document.body.style.cursor = 'pointer';
+      }}
+      onMouseLeave={() => {
+        document.body.style.cursor = 'initial';
+      }}
       onDragStart={handleDragStart}
       onDragMove={handleDragMove}
       onDragEnd={handleDragEnd}

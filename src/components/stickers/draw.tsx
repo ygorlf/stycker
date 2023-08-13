@@ -57,6 +57,12 @@ const Draw = observer((props: DrawProps) => {
       x={attrs.x}
       y={attrs.y}
       draggable
+      onMouseEnter={() => {
+        document.body.style.cursor = 'pointer';
+      }}
+      onMouseLeave={() => {
+        document.body.style.cursor = 'initial';
+      }}
       onDragStart={handleDragStart}
       onDragMove={handleDragMove}
       onDragEnd={handleDragEnd}
@@ -65,7 +71,7 @@ const Draw = observer((props: DrawProps) => {
       <Path
         x={0}
         y={0}
-        data={attrs.path}
+        data={attrs.path || ''}
         fill={attrs.fill || '#000'}
       />
     </Group>
