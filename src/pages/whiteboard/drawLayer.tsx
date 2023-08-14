@@ -69,6 +69,11 @@ const DrawLayer = observer(() => {
       fill: '#000',
       path,
       base64: null,
+      fontStyle: {
+        bold: false,
+        italic: false,
+        underline: false,
+      }
       // ...mousePointTo,
     };
 
