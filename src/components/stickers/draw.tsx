@@ -57,6 +57,7 @@ const Draw = observer((props: DrawProps) => {
       x={attrs.x}
       y={attrs.y}
       draggable
+      listening={boardStore.stickerMode === 'none'}
       onMouseEnter={() => {
         document.body.style.cursor = 'pointer';
       }}
