@@ -1,6 +1,18 @@
 import { types, Instance, cast } from 'mobx-state-tree';
 import { computedFn } from 'mobx-utils';
 
+export enum FontOptions {
+  bold = 'bold',
+  italic = 'italic',
+  underline = 'underline'
+}
+
+export const FontStyleModel = types.model('FontStyle', {
+  bold: types.boolean,
+  italic: types.boolean,
+  underline: types.boolean,
+});
+
 export const StickerModel = types.model('Sticker', {
   id: types.identifier,
   type: types.string,
@@ -10,19 +22,20 @@ export const StickerModel = types.model('Sticker', {
   height: types.number,
   text: types.maybeNull(types.string),
   fill: types.maybeNull(types.string),
+  fontStyle: FontStyleModel,
   base64: types.maybeNull(types.string),
   path: types.maybeNull(types.string)
 });
 
 const SelectedStickerModel = types.model('SelectedStickerModel', {
+  id: types.identifier,
   type: types.string,
-  id: types.string,
   x: types.number,
   y: types.number,
 });
 
 const EditableStickerModel = types.model('EditableSticker', {
-  id: types.string,
+  id: types.identifier,
   x: types.number,
   y: types.number,
   text: types.string,
@@ -30,7 +43,7 @@ const EditableStickerModel = types.model('EditableSticker', {
 
 type StickerType = Instance<typeof StickerModel>;
 type SelectedStickerType = Instance<typeof SelectedStickerModel>;
-type EditableStickerType = Instance<typeof EditableStickerModel>
+type EditableStickerType = Instance<typeof EditableStickerModel>;
 
 export const initialState = {
   editableSticker: {
@@ -53,6 +66,39 @@ export const StickersModel = types
     // get notes() {
     //   return Array.from(self.stickers.values())
     // },
+    isSelectedBold: computedFn(function isSelectedBold() {
+      return self.selectedStickers.find((i: SelectedStickerType) => {
+        const sticker = self.stickers.get(i.id);
+
+        if (sticker) {
+          return sticker.fontStyle.bold;
+        }
+  
+        return false;
+      });
+    }),
+    isSelectedItalic: computedFn(function isSelectedItalic() {
+      return self.selectedStickers.find((i: SelectedStickerType) => {
+        const sticker = self.stickers.get(i.id);
+
+        if (sticker) {
+          return sticker.fontStyle.italic;
+        }
+  
+        return false;
+      });
+    }),
+    isSelectedUnderline: computedFn(function isSelectedUnderline() {
+      return self.selectedStickers.find((i: SelectedStickerType) => {
+        const sticker = self.stickers.get(i.id);
+
+        if (sticker) {
+          return sticker.fontStyle.underline;
+        }
+  
+        return false;
+      });
+    }),
     photosIds: computedFn(function getPhotos() {
       return Array.from(self.stickers.values())
         .filter(sticker => sticker.type === 'photo')
@@ -102,6 +148,23 @@ export const StickersModel = types
             self.stickers.put({
               ...reference,
               fill: color
+            });
+          }
+        });
+      },
+      updateStickersFontStyle(stickers: SelectedStickerType[], type: 'bold' | 'italic' | 'underline') {
+        stickers.forEach((sticker) => {
+          const reference = self.stickers.get(sticker.id);
+
+          if (reference) {
+            const fontType = reference.fontStyle[type];
+
+            self.stickers.put({
+              ...reference,
+              fontStyle: {
+                ...reference.fontStyle,
+                [type]: !fontType,
+              }
             });
           }
         })
