@@ -125,6 +125,11 @@ const Whiteboard = observer(() => {
         height: 125,
         text: 'New Note!',
         fill: '#FFFF88',
+        fontStyle: {
+          bold: false,
+          italic: false,
+          underline: false,
+        },
         base64: null,
         path: null,
         ...mousePointTo,

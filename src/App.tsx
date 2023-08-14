@@ -9,6 +9,7 @@ import { initializeStore, Provider } from './models/root';
 
 const store = initializeStore();
 
+
 const App = () => {
   useEffect(() => {
     // Fetch necessary fonts.

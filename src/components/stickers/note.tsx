@@ -115,7 +115,9 @@ const Note = observer((props: NoteProps) => {
         fontSize={20}
         fill='#505050'
         fontFamily='Montserrat'
+        fontStyle={`${attrs.fontStyle.italic ? 'italic' : ''} ${attrs.fontStyle.bold ? 'bold' : ''}`}
         align='center'
+        textDecoration={attrs.fontStyle.underline ? 'underline' : 'normal'}
         verticalAlign='middle'
       />
     </Group>
