@@ -128,7 +128,6 @@ const Toolbar = observer(() => {
         </Option> */}
         <Option
           onClick={() => {
-            boardStore.setStickerMode('image');
             inputImageRef.current?.click();
           }}
         >

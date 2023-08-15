@@ -73,7 +73,7 @@ const Photo = observer((props: PhotoProps) => {
       x={attrs.x}
       y={attrs.y}
       draggable
-      listening={boardStore.stickerMode === 'none'}
+      listening={boardStore.stickerMode === 'none' && !boardStore.selectionArea.isActive}
       onMouseEnter={() => {
         document.body.style.cursor = 'pointer';
       }}
