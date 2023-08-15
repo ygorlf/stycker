@@ -41,9 +41,9 @@ const EditableStickerModel = types.model('EditableSticker', {
   text: types.string,
 });
 
-type StickerType = Instance<typeof StickerModel>;
-type SelectedStickerType = Instance<typeof SelectedStickerModel>;
-type EditableStickerType = Instance<typeof EditableStickerModel>;
+export type StickerType = Instance<typeof StickerModel>;
+export type SelectedStickerType = Instance<typeof SelectedStickerModel>;
+export type EditableStickerType = Instance<typeof EditableStickerModel>;
 
 export const initialState = {
   editableSticker: {
@@ -66,6 +66,33 @@ export const StickersModel = types
     // get notes() {
     //   return Array.from(self.stickers.values())
     // },
+    stickersCoordinates: computedFn(function stickersCoordinates() {
+      return Array.from(self.stickers.values())
+        .map(sticker => ({
+          type: sticker.type,
+          id: sticker.id,
+          x: sticker.x,
+          y: sticker.y,
+          width: sticker.width,
+          height: sticker.height,
+          rotation: 0
+        }));
+    }),
+    photosIds: computedFn(function getPhotos() {
+      return Array.from(self.stickers.values())
+        .filter(sticker => sticker.type === 'photo')
+        .map(sticker => sticker.id);
+    }),
+    notesIds: computedFn(function getNotes() {
+      return Array.from(self.stickers.values())
+        .filter(sticker => sticker.type === 'note')
+        .map(sticker => sticker.id);
+    }),
+    drawsIds: computedFn(function getDraws() {
+      return Array.from(self.stickers.values())
+        .filter(sticker => sticker.type === 'draw')
+        .map(sticker => sticker.id);
+    }),
     isSelectedBold: computedFn(function isSelectedBold() {
       return self.selectedStickers.find((i: SelectedStickerType) => {
         const sticker = self.stickers.get(i.id);
@@ -98,21 +125,6 @@ export const StickersModel = types
   
         return false;
       });
-    }),
-    photosIds: computedFn(function getPhotos() {
-      return Array.from(self.stickers.values())
-        .filter(sticker => sticker.type === 'photo')
-        .map(sticker => sticker.id);
-    }),
-    notesIds: computedFn(function getNotes() {
-      return Array.from(self.stickers.values())
-        .filter(sticker => sticker.type === 'note')
-        .map(sticker => sticker.id);
-    }),
-    drawsIds: computedFn(function getDraws() {
-      return Array.from(self.stickers.values())
-        .filter(sticker => sticker.type === 'draw')
-        .map(sticker => sticker.id);
     }),
   }))
   .actions((self) => {

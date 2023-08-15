@@ -78,7 +78,7 @@ const Note = observer((props: NoteProps) => {
       width={attrs.width}
       height={attrs.height}
       draggable
-      listening={boardStore.stickerMode === 'none'}
+      listening={boardStore.stickerMode === 'none' && !boardStore.selectionArea.isActive}
       onMouseEnter={() => {
         document.body.style.cursor = 'pointer';
       }}

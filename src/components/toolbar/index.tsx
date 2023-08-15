@@ -6,6 +6,7 @@ import { nanoid } from 'nanoid';
 // Store
 import { useStore } from '../../models/root';
 
+import drag from '../../assets/icons/drag.svg';
 import note from '../../assets/icons/note.svg';
 // import emoji from '../../assets/icons/emoji.svg';
 import picture from '../../assets/icons/picture.svg';
@@ -20,7 +21,7 @@ const Container = styled.div`
   width: 5rem;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
-  background: #e5b8f4;
+  background: snow;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
   transform: translateY(-50%);
 `;
@@ -37,7 +38,7 @@ const Option = styled.button`
   background: none;
 
   &:not(:last-child) {
-    border-bottom: 0.5px solid #505050;
+    border-bottom: 0.5px solid #D09CFA;
   }
 `;
 
@@ -104,6 +105,13 @@ const Toolbar = observer(() => {
   return (
     <>
       <Container>
+      <Option
+          onClick={() => {
+            boardStore.toggleBoardMode();
+          }}
+        >
+          <Icon src={drag} />
+        </Option>
         <Option
           onClick={() => {
             boardStore.setStickerMode('note');
