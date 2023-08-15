@@ -95,7 +95,6 @@ const Selection = observer(() => {
       onMouseUp={handleMouseUp}
       onClick={(e) => {
         if (boardStore.boardMode === 'select' && tempClickBlocker) {
-          console.log('WOLOLO');
           e.cancelBubble = true;
           setBlocker(false);
         }

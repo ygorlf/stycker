@@ -21,8 +21,6 @@ const Photo = observer((props: PhotoProps) => {
 			setImage(resource);
 		};
 
-    console.log(image);
-
 		resource.src = image;
   }
 

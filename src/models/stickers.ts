@@ -94,37 +94,37 @@ export const StickersModel = types
         .map(sticker => sticker.id);
     }),
     isSelectedBold: computedFn(function isSelectedBold() {
-      return self.selectedStickers.find((i: SelectedStickerType) => {
+      return self.selectedStickers.filter((i: SelectedStickerType) => {
         const sticker = self.stickers.get(i.id);
 
         if (sticker) {
-          return sticker.fontStyle.bold;
+          return !sticker.fontStyle.bold;
         }
-  
+
         return false;
-      });
+      }).length === 0;
     }),
     isSelectedItalic: computedFn(function isSelectedItalic() {
-      return self.selectedStickers.find((i: SelectedStickerType) => {
+      return self.selectedStickers.filter((i: SelectedStickerType) => {
         const sticker = self.stickers.get(i.id);
 
         if (sticker) {
-          return sticker.fontStyle.italic;
+          return !sticker.fontStyle.italic;
         }
-  
+
         return false;
-      });
+      }).length === 0;
     }),
     isSelectedUnderline: computedFn(function isSelectedUnderline() {
-      return self.selectedStickers.find((i: SelectedStickerType) => {
+      return self.selectedStickers.filter((i: SelectedStickerType) => {
         const sticker = self.stickers.get(i.id);
 
         if (sticker) {
-          return sticker.fontStyle.underline;
+          return !sticker.fontStyle.underline;
         }
-  
+
         return false;
-      });
+      }).length === 0;
     }),
   }))
   .actions((self) => {
@@ -165,17 +165,31 @@ export const StickersModel = types
         });
       },
       updateStickersFontStyle(stickers: SelectedStickerType[], type: 'bold' | 'italic' | 'underline') {
+        let apply: boolean;
+
+        switch (type) {
+          case 'bold':
+            apply = self.isSelectedBold();
+            break;
+          case 'italic':
+            apply = self.isSelectedItalic();
+            break;
+          case 'underline':
+            apply = self.isSelectedUnderline();
+            break;
+          default:
+            apply = false;
+        }
+
         stickers.forEach((sticker) => {
           const reference = self.stickers.get(sticker.id);
 
           if (reference) {
-            const fontType = reference.fontStyle[type];
-
             self.stickers.put({
               ...reference,
               fontStyle: {
                 ...reference.fontStyle,
-                [type]: !fontType,
+                [type]: !apply,
               }
             });
           }

@@ -69,7 +69,6 @@ export const BoardModel = types
         self.stickerMode = mode;
       },
       setSelectionArea(area: SelectionAreaType) {
-        console.log(area);
         self.selectionArea = area;
       }
     }
