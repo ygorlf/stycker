@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Group, Path } from 'react-konva';
 
@@ -57,7 +56,7 @@ const Draw = observer((props: DrawProps) => {
       x={attrs.x}
       y={attrs.y}
       draggable
-      listening={boardStore.stickerMode === 'none'}
+      listening={boardStore.stickerMode === 'none' && !boardStore.selectionArea.isActive}
       onMouseEnter={() => {
         document.body.style.cursor = 'pointer';
       }}
