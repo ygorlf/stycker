@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
-import { Stage, Layer } from 'react-konva';
+import { useEffect, useRef } from 'react';
+import { Stage, Layer, Rect } from 'react-konva';
 import { reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { nanoid } from 'nanoid';
@@ -16,6 +16,7 @@ import Draw from '../../components/stickers/draw';
 import Toolbar from '../../components/toolbar';
 import Toolbox from '../../components/toolbox';
 import Editor from '../../components/stickers/editor';
+import Selection from './selection';
 
 import DrawLayer from './drawLayer';
 
@@ -30,11 +31,11 @@ const maxScale = 8;    // You can adjust this value too
 const scaleBy = 1.15;
 
 const Whiteboard = observer(() => {
-  const [stageWidth] = useState(4000);
-  const [stageHeight] = useState(2000);
   const stageRef = useRef(null);
 
   const { boardStore, stickersStore } = useStore();
+
+  const { boardBounds, selectionArea } = boardStore;
 
   const handleDragStart = (e) => {
     e.evt.stopPropagation();
@@ -64,7 +65,9 @@ const Whiteboard = observer(() => {
     boardStore.setBoardBounds({
       ...position,
       scaleX: stageRef.current.scaleX(),
-      scaleY: stageRef.current.scaleY()
+      scaleY: stageRef.current.scaleY(),
+      width: boardBounds.width,
+      height: boardBounds.height,
     });
   };
 
@@ -104,7 +107,9 @@ const Whiteboard = observer(() => {
       x: pos.x,
       y: pos.y,
       scaleX: newScale,
-      scaleY: newScale
+      scaleY: newScale,
+      width: boardBounds.width,
+      height: boardBounds.height,
     });
   };
 
@@ -152,8 +157,8 @@ const Whiteboard = observer(() => {
     // Assuming viewport width and height are the same as the initial stageWidth and stageHeight.
 
     // Calculate the scaled width and height of the stage.
-    const scaledWidth = stageWidth * scale;
-    const scaledHeight = stageHeight * scale;
+    const scaledWidth = boardBounds.width * scale;
+    const scaledHeight = boardBounds.height * scale;
 
     const minX = -(scaledWidth - window.innerWidth);
     const minY = -(scaledHeight - window.innerHeight);
@@ -187,6 +192,16 @@ const Whiteboard = observer(() => {
     }
   };
 
+  const handleBoardCursorChange = (mode: string) => {
+    switch (mode) {
+      case 'drag':
+        document.body.style.cursor = `grab`;
+        break;
+      default:
+        document.body.style.cursor = `initial`;
+    }
+  };
+
   useEffect(() => {
     const cursorReaction = reaction(
       () => boardStore.stickerMode,
@@ -195,7 +210,15 @@ const Whiteboard = observer(() => {
       }
     );
 
+    const boardReaction = reaction(
+      () => boardStore.boardMode,
+      () => {
+        handleBoardCursorChange(boardStore.boardMode);
+      }
+    );
+
     return () => {
+      boardReaction();
       cursorReaction();
     }
   }, []);
@@ -222,15 +245,14 @@ const Whiteboard = observer(() => {
 
   const renderDraws = () => {
     return stickersStore.drawsIds()
-    .map((id: string) => (
-      <Draw
-        key={id}
-        id={id}
-      />
-    ))
+      .map((id: string) => (
+        <Draw
+          key={id}
+          id={id}
+        />
+      ))
   }
 
-  const { boardBounds } = boardStore;
   const { selectedStickers, editableSticker } = stickersStore;
 
   return (
@@ -239,13 +261,13 @@ const Whiteboard = observer(() => {
     >
       <Stage
         ref={stageRef}
-        style={{ width: stageWidth, height: stageHeight }}
+        style={{ width: boardBounds.width, height: boardBounds.height }}
         x={boardBounds.x}
         y={boardBounds.y}
         scaleX={boardBounds.scaleX}
         scaleY={boardBounds.scaleY}
-        width={stageWidth}
-        height={stageHeight}
+        width={boardBounds.width}
+        height={boardBounds.height}
         onWheel={handleWheel}
         onClick={handleClick}
         onDragStart={handleDragStart}
@@ -255,15 +277,31 @@ const Whiteboard = observer(() => {
         dragBoundFunc={dragBoundFunc}
       >
         <Grid
-          viewRect={{ x1: 0, y1: 0, x2: stageWidth, y2: stageHeight }}
-          gridFullRect={{ x1: 0, y1: 0, x2: stageWidth, y2: stageHeight }}
+          viewRect={{ x1: 0, y1: 0, x2: boardBounds.width, y2: boardBounds.height }}
+          gridFullRect={{ x1: 0, y1: 0, x2: boardBounds.width, y2: boardBounds.height }}
           stepSize={100}
           scale={boardBounds.scaleX}
         />
         <Layer>
+          {boardStore.boardMode === 'select' && (
+            <Selection />
+          )}
+
           {renderNotes()}
           {renderPhotos()}
           {renderDraws()}
+
+          <Rect
+            x={selectionArea.x}
+            y={selectionArea.y}
+            width={selectionArea.width}
+            height={selectionArea.height}
+            listening={false}
+            fill='rgba(208, 156, 250, 0.2)'
+            stroke="#D09CFA"
+            strokeWidth={1}
+
+          />
         </Layer>
       </Stage>
       {editableSticker.id && (

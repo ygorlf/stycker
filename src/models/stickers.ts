@@ -41,9 +41,9 @@ const EditableStickerModel = types.model('EditableSticker', {
   text: types.string,
 });
 
-type StickerType = Instance<typeof StickerModel>;
-type SelectedStickerType = Instance<typeof SelectedStickerModel>;
-type EditableStickerType = Instance<typeof EditableStickerModel>;
+export type StickerType = Instance<typeof StickerModel>;
+export type SelectedStickerType = Instance<typeof SelectedStickerModel>;
+export type EditableStickerType = Instance<typeof EditableStickerModel>;
 
 export const initialState = {
   editableSticker: {
@@ -66,38 +66,17 @@ export const StickersModel = types
     // get notes() {
     //   return Array.from(self.stickers.values())
     // },
-    isSelectedBold: computedFn(function isSelectedBold() {
-      return self.selectedStickers.find((i: SelectedStickerType) => {
-        const sticker = self.stickers.get(i.id);
-
-        if (sticker) {
-          return sticker.fontStyle.bold;
-        }
-  
-        return false;
-      });
-    }),
-    isSelectedItalic: computedFn(function isSelectedItalic() {
-      return self.selectedStickers.find((i: SelectedStickerType) => {
-        const sticker = self.stickers.get(i.id);
-
-        if (sticker) {
-          return sticker.fontStyle.italic;
-        }
-  
-        return false;
-      });
-    }),
-    isSelectedUnderline: computedFn(function isSelectedUnderline() {
-      return self.selectedStickers.find((i: SelectedStickerType) => {
-        const sticker = self.stickers.get(i.id);
-
-        if (sticker) {
-          return sticker.fontStyle.underline;
-        }
-  
-        return false;
-      });
+    stickersCoordinates: computedFn(function stickersCoordinates() {
+      return Array.from(self.stickers.values())
+        .map(sticker => ({
+          type: sticker.type,
+          id: sticker.id,
+          x: sticker.x,
+          y: sticker.y,
+          width: sticker.width,
+          height: sticker.height,
+          rotation: 0
+        }));
     }),
     photosIds: computedFn(function getPhotos() {
       return Array.from(self.stickers.values())
@@ -113,6 +92,39 @@ export const StickersModel = types
       return Array.from(self.stickers.values())
         .filter(sticker => sticker.type === 'draw')
         .map(sticker => sticker.id);
+    }),
+    isSelectedBold: computedFn(function isSelectedBold() {
+      return self.selectedStickers.filter((i: SelectedStickerType) => {
+        const sticker = self.stickers.get(i.id);
+
+        if (sticker) {
+          return !sticker.fontStyle.bold;
+        }
+
+        return false;
+      }).length === 0;
+    }),
+    isSelectedItalic: computedFn(function isSelectedItalic() {
+      return self.selectedStickers.filter((i: SelectedStickerType) => {
+        const sticker = self.stickers.get(i.id);
+
+        if (sticker) {
+          return !sticker.fontStyle.italic;
+        }
+
+        return false;
+      }).length === 0;
+    }),
+    isSelectedUnderline: computedFn(function isSelectedUnderline() {
+      return self.selectedStickers.filter((i: SelectedStickerType) => {
+        const sticker = self.stickers.get(i.id);
+
+        if (sticker) {
+          return !sticker.fontStyle.underline;
+        }
+
+        return false;
+      }).length === 0;
     }),
   }))
   .actions((self) => {
@@ -153,17 +165,31 @@ export const StickersModel = types
         });
       },
       updateStickersFontStyle(stickers: SelectedStickerType[], type: 'bold' | 'italic' | 'underline') {
+        let apply: boolean;
+
+        switch (type) {
+          case 'bold':
+            apply = self.isSelectedBold();
+            break;
+          case 'italic':
+            apply = self.isSelectedItalic();
+            break;
+          case 'underline':
+            apply = self.isSelectedUnderline();
+            break;
+          default:
+            apply = false;
+        }
+
         stickers.forEach((sticker) => {
           const reference = self.stickers.get(sticker.id);
 
           if (reference) {
-            const fontType = reference.fontStyle[type];
-
             self.stickers.put({
               ...reference,
               fontStyle: {
                 ...reference.fontStyle,
-                [type]: !fontType,
+                [type]: !apply,
               }
             });
           }

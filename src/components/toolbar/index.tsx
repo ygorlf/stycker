@@ -6,10 +6,10 @@ import { nanoid } from 'nanoid';
 // Store
 import { useStore } from '../../models/root';
 
-import note from '../../assets/icons/note.svg';
-// import emoji from '../../assets/icons/emoji.svg';
-import picture from '../../assets/icons/picture.svg';
-import draw from '../../assets/icons/draw.svg';
+import Drag from '../icons/drag';
+import Note from '../icons/note';
+import Picture from '../icons/picture';
+import Draw from '../icons/draw';
 
 const Container = styled.div`
   display: flex;
@@ -20,7 +20,7 @@ const Container = styled.div`
   width: 5rem;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
-  background: #e5b8f4;
+  background: snow;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
   transform: translateY(-50%);
 `;
@@ -39,11 +39,6 @@ const Option = styled.button`
   &:not(:last-child) {
     border-bottom: 0.5px solid #505050;
   }
-`;
-
-const Icon = styled.img`
-  width: 35px;
-  height: 35px;
 `;
 
 const GhostInput = styled.input`
@@ -104,34 +99,46 @@ const Toolbar = observer(() => {
   return (
     <>
       <Container>
+      <Option
+          onClick={() => {
+            boardStore.toggleBoardMode();
+          }}
+        >
+          <Drag
+            fill={boardStore.boardMode === 'drag' ? '#d09cfa' : '#fff'}
+          />
+        </Option>
         <Option
           onClick={() => {
+            boardStore.setBoardMode('select');
             boardStore.setStickerMode('note');
           }}
         >
-          <Icon src={note} />
+          <Note
+            fill={boardStore.stickerMode === 'note' ? '#FFFF88' : '#fff'}
+          />
         </Option>
-        {/* <Option
-          onClick={() => {
-            boardStore.setStickerMode('emoji');
-          }}
-        >
-          <Icon src={emoji} />
-        </Option> */}
         <Option
           onClick={() => {
-            boardStore.setStickerMode('image');
+            boardStore.setBoardMode('select');
             inputImageRef.current?.click();
           }}
         >
-          <Icon src={picture} />
+          <Picture
+            mainColor={boardStore.stickerMode === 'picture' ? '#d09cfa' : '#fff'}
+            sencondColor={boardStore.stickerMode === 'picture' ? '#dfccfb' : '#fff'}
+          />
         </Option>
         <Option
           onClick={() => {
+            boardStore.setBoardMode('select');
             boardStore.setStickerMode('draw');
           }}
         >
-          <Icon src={draw} />
+          <Draw
+            mainColor={boardStore.stickerMode === 'draw' ? '#d09cfa' : '#fff'}
+            sencondColor={boardStore.stickerMode === 'draw' ? '#dfccfb' : '#fff'}
+          />
         </Option>
       </Container>
       <GhostInput

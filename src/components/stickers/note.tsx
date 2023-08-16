@@ -71,6 +71,10 @@ const Note = observer((props: NoteProps) => {
     sticker => sticker.id === props.id
   ).length > 0;
 
+  const isDragMode = boardStore.boardMode === 'drag';
+  const isStickerMode = boardStore.stickerMode !== 'none';
+  const isListening = !isDragMode && !isStickerMode && !boardStore.selectionArea.isActive;
+
   return (
     <Group
       x={attrs.x}
@@ -78,7 +82,7 @@ const Note = observer((props: NoteProps) => {
       width={attrs.width}
       height={attrs.height}
       draggable
-      listening={boardStore.stickerMode === 'none'}
+      listening={isListening}
       onMouseEnter={() => {
         document.body.style.cursor = 'pointer';
       }}
