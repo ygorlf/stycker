@@ -20,8 +20,6 @@ import Selection from './selection';
 
 import DrawLayer from './drawLayer';
 
-import Copyright from '../../components/copyright';
-
 // Images
 import note from '../../assets/icons/note.png';
 import draw from '../../assets/icons/draw.png';
@@ -314,7 +312,6 @@ const Whiteboard = observer(() => {
       {boardStore.stickerMode === 'draw' && (
         <DrawLayer />
       )}
-      <Copyright />
     </div>
   );
 })
