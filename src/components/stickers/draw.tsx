@@ -51,12 +51,16 @@ const Draw = observer((props: DrawProps) => {
 
   if (!attrs) return null;
 
+  const isDragMode = boardStore.boardMode === 'drag';
+  const isStickerMode = boardStore.stickerMode !== 'none';
+  const isListening = !isDragMode && !isStickerMode && !boardStore.selectionArea.isActive;
+
   return (
     <Group
       x={attrs.x}
       y={attrs.y}
       draggable
-      listening={boardStore.stickerMode === 'none' && !boardStore.selectionArea.isActive}
+      listening={isListening}
       onMouseEnter={() => {
         document.body.style.cursor = 'pointer';
       }}

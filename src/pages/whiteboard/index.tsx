@@ -23,7 +23,6 @@ import DrawLayer from './drawLayer';
 import Copyright from '../../components/copyright';
 
 // Images
-import drag from '../../assets/icons/drag.png';
 import note from '../../assets/icons/note.png';
 import draw from '../../assets/icons/draw.png';
 
@@ -196,7 +195,7 @@ const Whiteboard = observer(() => {
   const handleBoardCursorChange = (mode: string) => {
     switch (mode) {
       case 'drag':
-        document.body.style.cursor = `url(${drag}), default`;
+        document.body.style.cursor = `grab`;
         break;
       default:
         document.body.style.cursor = `initial`;

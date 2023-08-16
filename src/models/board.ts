@@ -62,6 +62,9 @@ export const BoardModel = types
           self.boardMode = 'select';
         }
       },
+      setBoardMode(mode: 'drag' | 'select') {
+        self.boardMode = mode;
+      },
       setBoardBounds(bounds: BoardBoundsType) {
         self.boardBounds = bounds;
       },
