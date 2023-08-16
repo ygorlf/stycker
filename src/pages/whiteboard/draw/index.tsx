@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { getStroke } from 'perfect-freehand';
 import { nanoid } from 'nanoid';
 
-import { useStore } from '../../models/root';
+import { useStore } from '../../../models/root';
 
 const getSvgPathFromStroke = (stroke: number[][]) => {
   if (!stroke.length) return '';

@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { Rect } from 'react-konva';
 import { observer } from 'mobx-react-lite';
 
-import { useStore } from '../../models/root';
+import { useStore } from '../../../models/root';
+import { SelectedStickerType } from '../../../models/stickers';
 
-import { isOverlap, calcStickerArea } from '../../utils/math';
-import { SelectedStickerType } from '../../models/stickers';
+import { isOverlap, calcStickerArea } from '../../../utils/math';
 
 const Selection = observer(() => {
   const [tempClickBlocker, setBlocker] = useState(false);
