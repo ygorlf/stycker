@@ -8,6 +8,8 @@ import { nanoid } from 'nanoid';
 import { useStore } from '../../models/root';
 
 import Grid from './grid';
+import Selection from './selection';
+import DrawLayer from './draw';
 
 import Note from '../../components/stickers/note';
 import Photo from '../../components/stickers/photo';
@@ -16,17 +18,13 @@ import Draw from '../../components/stickers/draw';
 import Toolbar from '../../components/toolbar';
 import Toolbox from '../../components/toolbox';
 import Editor from '../../components/stickers/editor';
-import Selection from './selection';
-
-import DrawLayer from './drawLayer';
-
 // Images
 import note from '../../assets/icons/note.png';
 import draw from '../../assets/icons/draw.png';
 
 const minScale = 1;  // You can adjust this value
 const maxScale = 8;    // You can adjust this value too
-const scaleBy = 1.15;
+const scaleBy = 1.05;
 
 const Whiteboard = observer(() => {
   const stageRef = useRef(null);
