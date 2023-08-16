@@ -10,6 +10,7 @@ import { useStore } from '../../models/root';
 import Grid from './grid';
 import Selection from './selection';
 import DrawLayer from './draw';
+import Zoom from './zoom';
 
 import Note from '../../components/stickers/note';
 import Photo from '../../components/stickers/photo';
@@ -310,6 +311,7 @@ const Whiteboard = observer(() => {
       {boardStore.stickerMode === 'draw' && (
         <DrawLayer />
       )}
+      <Zoom />
     </div>
   );
 })
