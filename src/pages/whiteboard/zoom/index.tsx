@@ -3,8 +3,12 @@ import { observer } from 'mobx-react-lite';
 
 import { useStore } from '../../../models/root';
 
-import add from '../../../assets/icons/add.svg';
-import subtract from '../../../assets/icons/subtract.svg';
+import Add from '../../../components/icons/add';
+import Subtract from '../../../components/icons/subtract';
+
+interface ZoomProps {
+  handleCenteredZoom: (type: 'zoom-in' | 'zoom-out') => void
+}
 
 interface ButtonProps {
   isLeft?: boolean;
@@ -42,7 +46,6 @@ const Button = styled.button<ButtonProps>`
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
 
-    background-image: url(${subtract});
     background-repeat: no-repeat;
     background-position: center;
     background-size: 1.15rem;
@@ -52,14 +55,13 @@ ${({ isRight }) => isRight && `
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
 
-    background-image: url(${add});
     background-repeat: no-repeat;
     background-position: center;
     background-size: 1.15rem;
   `}
 `;
 
-const Zoom = observer(() => {
+const Zoom = observer((props: ZoomProps) => {
   const { boardStore } = useStore();
 
   const getZoomLevel = () => {
@@ -68,10 +70,18 @@ const Zoom = observer(() => {
 
   return (
     <Container>
-      <Button isLeft>
+      <Button
+        isLeft
+        onClick={() => props.handleCenteredZoom('zoom-out')}
+      >
+        <Subtract fill='#000' />
       </Button>
       <ZoomLabel>{getZoomLevel()}%</ZoomLabel>
-      <Button isRight>
+      <Button
+        isRight
+        onClick={() => props.handleCenteredZoom('zoom-in')}
+      >
+        <Add fill='#000' />
       </Button>
     </Container>
   )
