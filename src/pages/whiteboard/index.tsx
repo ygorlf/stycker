@@ -10,6 +10,7 @@ import { useStore } from '../../models/root';
 import Grid from './grid';
 import Selection from './selection';
 import DrawLayer from './draw';
+import Zoom from './zoom';
 
 import Note from '../../components/stickers/note';
 import Photo from '../../components/stickers/photo';
@@ -92,9 +93,9 @@ const Whiteboard = observer(() => {
     // Clamp the newScale between minScale and maxScale
     newScale = Math.max(minScale, Math.min(newScale, maxScale));
 
-    let x =
+    const x =
       -(mousePointTo.x - stage.getPointerPosition().x / newScale) * newScale;
-    let y =
+    const y =
       -(mousePointTo.y - stage.getPointerPosition().y / newScale) * newScale;
 
     const pos = boundFunc({ x, y }, newScale);
@@ -104,6 +105,45 @@ const Whiteboard = observer(() => {
       y: pos.y,
       scaleX: newScale,
       scaleY: newScale,
+      width: boardBounds.width,
+      height: boardBounds.height,
+    });
+  };
+
+  const handleCenteredZoom = (type: 'zoom-in' | 'zoom-out') => {
+    const stage = stageRef.current.getStage();
+    const oldScaleX = stage.scaleX();
+    const oldScaleY = stage.scaleY();
+
+    const center = {
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 2,
+    };
+
+    const relatedTo = {
+      x: (center.x - stage.x()) / oldScaleX,
+      y: (center.y - stage.y()) / oldScaleY,
+    };
+
+    let newScaleX = type === 'zoom-in' ? oldScaleX * scaleBy : oldScaleX / scaleBy;
+    let newScaleY = type === 'zoom-in' ? oldScaleY * scaleBy : oldScaleY / scaleBy;
+
+    // Clamp the newScale between minScale and maxScale
+    newScaleX = Math.max(minScale, Math.min(newScaleX, maxScale));
+    newScaleY = Math.max(minScale, Math.min(newScaleY, maxScale));
+
+    const newPos = {
+      x: center.x - relatedTo.x * newScaleX,
+      y: center.y - relatedTo.y * newScaleY,
+    };
+
+    // const pos = boundFunc({ x: newPos.x, y: newPos.y }, newScaleX);
+
+    boardStore.setBoardBounds({
+      x: newPos.x,
+      y: newPos.y,
+      scaleX: newScaleX,
+      scaleY: newScaleY,
       width: boardBounds.width,
       height: boardBounds.height,
     });
@@ -310,6 +350,9 @@ const Whiteboard = observer(() => {
       {boardStore.stickerMode === 'draw' && (
         <DrawLayer />
       )}
+      <Zoom
+        handleCenteredZoom={handleCenteredZoom}
+      />
     </div>
   );
 })
