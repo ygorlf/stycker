@@ -335,7 +335,7 @@ const Whiteboard = observer(() => {
             listening={false}
             fill='rgba(208, 156, 250, 0.2)'
             stroke="#D09CFA"
-            strokeWidth={1}
+            strokeWidth={1 / boardBounds.scaleX}
 
           />
         </Layer>
