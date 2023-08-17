@@ -101,6 +101,7 @@ const Toolbar = observer(() => {
       <Container>
       <Option
           onClick={() => {
+            boardStore.setStickerMode('none');
             boardStore.toggleBoardMode();
           }}
         >
