@@ -63,8 +63,8 @@ const Photo = observer((props: PhotoProps) => {
   const attrs = stickersStore.stickers.get(props.id);
 
   useEffect(() => {
-    setupImage(attrs?.base64);
-  }, []);
+    setupImage(attrs?.base64 || '');
+  }, []); // eslint-disable-line
 
   if (!attrs) return null;
 

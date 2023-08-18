@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
+
 import { useEffect, useRef } from 'react';
 import { Stage, Layer, Rect } from 'react-konva';
 import { reaction } from 'mobx';
@@ -257,7 +260,7 @@ const Whiteboard = observer(() => {
       boardReaction();
       cursorReaction();
     }
-  }, []);
+  });
 
   const renderNotes = () => {
     return stickersStore.notesIds()

@@ -47,7 +47,7 @@ const Selection = observer(() => {
     });
   };
 
-  const handleMouseUp = (e) => {
+  const handleMouseUp = () => {
     const { stickersCoordinates } = stickersStore;
 
     const selectedStickers: SelectedStickerType[] = [];

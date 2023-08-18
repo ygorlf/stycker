@@ -51,7 +51,7 @@ export const BoardModel = types
     stickerMode: types.string,
     selectionArea: SelectionAreaModel
   })
-  .views((self) => ({
+  .views(() => ({
   }))
   .actions((self) => {
     return {
