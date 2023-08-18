@@ -110,13 +110,13 @@ const Note = observer((props: NoteProps) => {
         y={0}
         width={attrs.width}
         height={attrs.height}
-        fill={attrs.fill}
+        fill={attrs.fill || ''}
       />
       <Text
         x={attrs.width * 0.05}
         width={attrs.width * 0.9}
         height={attrs.height}
-        text={attrs.text}
+        text={attrs.text || ''}
         fontSize={20}
         fill='#505050'
         fontFamily='Montserrat'
