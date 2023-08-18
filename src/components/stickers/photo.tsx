@@ -10,7 +10,7 @@ interface PhotoProps {
 }
 
 const Photo = observer((props: PhotoProps) => {
-  const [imageData, setImage] = useState<string | HTMLImageElement>('');
+  const [imageData, setImage] = useState<undefined | CanvasImageSource>(undefined);
 
   const { boardStore, stickersStore } = useStore();
 
