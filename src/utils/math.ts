@@ -6,6 +6,13 @@ interface Shape {
   rotation: number;
 }
 
+interface Area {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
 export const degToRad = (angle: number) => {
   return (angle / 180) * Math.PI;
 }
@@ -62,7 +69,7 @@ export const calcStickersArea = (stickers: Shape[]) => {
   };
 }
 
-export const isOverlap = (sticker1: Shape, sticker2: Shape) => {
+export const isOverlap = (sticker1: Area, sticker2: Area) => {
   const offset = 0;
   if (sticker1.x - offset > sticker2.x + sticker2.width) {
     return false;
