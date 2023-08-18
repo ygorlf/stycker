@@ -83,7 +83,7 @@ const Toolbar = observer(() => {
     stickersStore.addSticker(sticker);
   }
 
-  const handleImageUpload = (e) => {
+  const handleImageUpload = (e: any) => { // eslint-disable-line
     const file = e.target.files[0];
 
     const filereader = new FileReader();

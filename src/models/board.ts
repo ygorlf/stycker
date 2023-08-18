@@ -19,8 +19,6 @@ export const SelectionAreaModel = types.model('SelectionArea', {
   height: types.number
 });
 
-export const BoardModeModel = types.enumeration(['drag', 'select']);
-
 type SelectionAreaType = Instance<typeof SelectionAreaModel>;
 type BoardBoundsType = Instance<typeof BoardBoundsModel>;
 
@@ -46,7 +44,7 @@ export const initialState = {
 
 export const BoardModel = types
   .model("BoardStore", {
-    boardMode: BoardModeModel,
+    boardMode: types.string,
     boardBounds: BoardBoundsModel,
     stickerMode: types.string,
     selectionArea: SelectionAreaModel
