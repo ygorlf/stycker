@@ -11,7 +11,7 @@ interface NoteProps {
 const Note = observer((props: NoteProps) => {
   const { boardStore, stickersStore } = useStore();
 
-  const handleClick = (e) => {
+  const handleClick = (e: any) => { // eslint-disable-line
     e.cancelBubble = true;
 
     const pos = e.target.parent.getAbsolutePosition(); // Get the absolute position of the group, by defaukt the text element will be the target
@@ -23,7 +23,7 @@ const Note = observer((props: NoteProps) => {
     }]);
   };
 
-  const handleDoubleClick = (e) => {
+  const handleDoubleClick = (e: any) => { // eslint-disable-line
     e.cancelBubble = true;
 
     const attrs = stickersStore.stickers.get(props.id);
@@ -39,15 +39,15 @@ const Note = observer((props: NoteProps) => {
     });
   };
 
-  const handleDragStart = (e) => {
+  const handleDragStart = (e: any) => { // eslint-disable-line
     e.cancelBubble = true;
   };
 
-  const handleDragMove = (e) => {
+  const handleDragMove = (e: any) => { // eslint-disable-line
     e.cancelBubble = true;
   }
 
-  const handleDragEnd = (e) => {
+  const handleDragEnd = (e: any) => { // eslint-disable-line
     e.cancelBubble = true;
 
     const position = {

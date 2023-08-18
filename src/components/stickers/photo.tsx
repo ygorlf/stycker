@@ -24,7 +24,7 @@ const Photo = observer((props: PhotoProps) => {
 		resource.src = image;
   }
 
-  const handleClick = (e) => {
+  const handleClick = (e: any) => { // eslint-disable-line
     e.cancelBubble = true;
 
     const pos = e.target.parent.getAbsolutePosition(); // Get the absolute position of the group, by defaukt the text element will be the target
@@ -36,15 +36,15 @@ const Photo = observer((props: PhotoProps) => {
     }]);
   };
 
-  const handleDragStart = (e) => {
+  const handleDragStart = (e: any) => { // eslint-disable-line
     e.cancelBubble = true;
   };
 
-  const handleDragMove = (e) => {
+  const handleDragMove = (e: any) => { // eslint-disable-line
     e.cancelBubble = true;
   }
 
-  const handleDragEnd = (e) => {
+  const handleDragEnd = (e: any) => { // eslint-disable-line
     e.cancelBubble = true;
 
     const position = {
