@@ -17,7 +17,6 @@ interface ColorItemProps {
 
 interface FontButtonProps {
   icon: any; // eslint-disable-line
-  isActive: boolean;
 }
 
 interface FontOption {

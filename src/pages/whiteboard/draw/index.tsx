@@ -36,15 +36,15 @@ const options = {
   thinning: 0.5,
   smoothing: 0.5,
   streamline: 0.5,
-  easing: (t) => t,
+  easing: (t: any) => t, // eslint-disable-line
   start: {
     taper: 0,
-    easing: (t) => t,
+    easing: (t: any) => t, // eslint-disable-line
     cap: true
   },
   end: {
     taper: 100,
-    easing: (t) => t,
+    easing: (t: any) => t, // eslint-disable-line
     cap: true
   }
 };
@@ -80,14 +80,14 @@ const DrawLayer = observer(() => {
     stickersStore.addSticker(sticker);
   };
 
-  const handlePointerDown = (e) => {
+  const handlePointerDown = (e: any) => { // eslint-disable-line
     e.target.setPointerCapture(e.pointerId);
 
     setPoints([[e.pageX, e.pageY, e.pressure]]);
     setDrawing(true);
   };
 
-  const handlePointerMove = (e) => {
+  const handlePointerMove = (e: any) => { // eslint-disable-line
     // if (e.buttons !== 1) return;
     if (!isDrawing) return;
 
