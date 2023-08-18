@@ -1,8 +1,16 @@
-export const degToRad = (angle) => {
+interface Shape {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  rotation: number;
+}
+
+export const degToRad = (angle: number) => {
   return (angle / 180) * Math.PI;
 }
 
-export const calcStickerArea = (shape) => {
+export const calcStickerArea = (shape: Shape) => {
   const angleRad = degToRad(shape.rotation);
 
   const x1 = shape.x;
@@ -31,7 +39,7 @@ export const calcStickerArea = (shape) => {
   };
 }
 
-export const calcStickersArea = (stickers) => {
+export const calcStickersArea = (stickers: Shape[]) => {
   let x1 = 0;
   let y1 = 0;
   let x2 = 0;
@@ -54,7 +62,7 @@ export const calcStickersArea = (stickers) => {
   };
 }
 
-export const isOverlap = (sticker1, sticker2) => {
+export const isOverlap = (sticker1: Shape, sticker2: Shape) => {
   const offset = 0;
   if (sticker1.x - offset > sticker2.x + sticker2.width) {
     return false;
