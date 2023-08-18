@@ -13,7 +13,7 @@ const Selection = observer(() => {
   const { boardStore, stickersStore } = useStore();
   const { selectionArea, boardBounds } = boardStore;
 
-  const handleMouseDown = (e) => {
+  const handleMouseDown = (e: any) => { // eslint-disable-line
     e.cancelBubble = true;
 
     const stage = e.target.getStage();
@@ -31,7 +31,7 @@ const Selection = observer(() => {
     });
   };
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = (e: any) => { // eslint-disable-line
     if (!selectionArea.isActive) return;
 
     const stage = e.target.getStage();
