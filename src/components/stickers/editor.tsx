@@ -10,10 +10,12 @@ interface ContainerProps {
   y: number;
   width: number;
   height: number;
+  color: string;
 }
 
 interface InputProps {
   fontSize: number;
+  value: string;
 }
 
 const Container = styled.div<ContainerProps>`
@@ -56,10 +58,10 @@ const Editor = observer(() => {
       y={editableSticker.y}
       width={sticker.width * boardStore.boardBounds.scaleX}
       height={sticker.height * boardStore.boardBounds.scaleY}
-      color={sticker.fill}
+      color={sticker.fill || ''}
     >
       <Text
-        value={sticker.text}
+        value={sticker.text || ''}
         fontSize={20 * boardStore.boardBounds.scaleX}
         onChange={(e) => {
           stickersStore.updateStickerText({
