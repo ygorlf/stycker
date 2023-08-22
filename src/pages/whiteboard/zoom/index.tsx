@@ -21,7 +21,7 @@ const Container = styled.div`
   right: 1rem;
   display: flex;
   align-items: center;
-  border: 1px solid #BEADFA;
+  border: 1px solid #505050;
   border-radius: 5px;
   background: snow;
 `;
