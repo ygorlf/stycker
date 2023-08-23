@@ -324,9 +324,7 @@ const Whiteboard = observer(() => {
           scale={boardBounds.scaleX}
         />
         <Layer>
-          {boardStore.boardMode === 'select' && (
-            <Selection />
-          )}
+          <Selection />
 
           {renderNotes()}
           {renderPhotos()}
@@ -338,7 +336,6 @@ const Whiteboard = observer(() => {
             fill='rgba(208, 156, 250, 0.2)'
             stroke="#D09CFA"
             strokeWidth={1 / boardBounds.scaleX}
-
           />
         </Layer>
 

@@ -114,6 +114,7 @@ const Selection = observer(() => {
       y={0}
       width={boardBounds.width}
       height={boardBounds.height}
+      listening={boardStore.boardMode !== 'drag'}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
