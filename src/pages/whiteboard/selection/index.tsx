@@ -108,6 +108,8 @@ const Selection = observer(() => {
     });
   };
 
+  console.log('LISTENING: ', boardStore.boardMode);
+
   return (
     <Rect
       x={0}
