@@ -333,10 +333,7 @@ const Whiteboard = observer(() => {
           {renderDraws()}
 
           <Rect
-            x={selectionArea.x}
-            y={selectionArea.y}
-            width={selectionArea.width}
-            height={selectionArea.height}
+            name='selection-box'
             listening={false}
             fill='rgba(208, 156, 250, 0.2)'
             stroke="#D09CFA"
