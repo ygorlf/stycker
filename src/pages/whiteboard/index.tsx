@@ -314,7 +314,7 @@ const Whiteboard = observer(() => {
         onDragStart={handleDragStart}
         onDragMove={handleDragMove}
         onDragEnd={handleDragEnd}
-        draggable
+        draggable={boardStore.boardMode === 'drag'}
         dragBoundFunc={dragBoundFunc}
       >
         <Grid
