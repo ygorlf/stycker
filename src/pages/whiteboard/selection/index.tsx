@@ -16,6 +16,8 @@ const Selection = observer(() => {
   const handleMouseDown = (e: any) => { // eslint-disable-line
     e.cancelBubble = true;
 
+    console.log('mousedown: ', e);
+
     const stage = e.target.getStage();
     const pos = stage.getPointerPosition();
 
@@ -34,6 +36,8 @@ const Selection = observer(() => {
   const handleMouseMove = (e: any) => { // eslint-disable-line
     if (!selectionArea.isActive) return;
 
+    console.log('mousemove: ', e);
+
     const stage = e.target.getStage();
     const pos = stage.getPointerPosition();
 
@@ -49,6 +53,8 @@ const Selection = observer(() => {
 
   const handleMouseUp = () => {
     const { stickersCoordinates } = stickersStore;
+
+    console.log('mouseup: ');
 
     const selectedStickers: SelectedStickerType[] = [];
 
