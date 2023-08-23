@@ -99,6 +99,8 @@ const Selection = observer(() => {
           setBlocker(false);
         }
       }}
+      stroke={'red'}
+      strokeWidth={2}
     />
   )
 });
