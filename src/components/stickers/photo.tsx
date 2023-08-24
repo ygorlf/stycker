@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Group, Image } from 'react-konva';
+import { Group, Image, Rect } from 'react-konva';
 
 // Store
 import { useStore } from '../../models/root';
@@ -17,11 +17,11 @@ const Photo = observer((props: PhotoProps) => {
   const setupImage = (image: string) => {
     const resource = new window.Image();
 
-		resource.onload = () => {
-			setImage(resource);
-		};
+    resource.onload = () => {
+      setImage(resource);
+    };
 
-		resource.src = image;
+    resource.src = image;
   }
 
   const handleClick = (e: any) => { // eslint-disable-line
@@ -68,12 +68,17 @@ const Photo = observer((props: PhotoProps) => {
 
   if (!attrs) return null;
 
+  const isSelected = stickersStore.selectedStickers.filter(
+    sticker => sticker.id === props.id
+  ).length > 0;
+
   const isDragMode = boardStore.boardMode === 'drag';
   const isStickerMode = boardStore.stickerMode !== 'none';
   const isListening = !isDragMode && !isStickerMode && !boardStore.selectionArea.isActive;
 
   return (
     <Group
+      name={attrs.id}
       x={attrs.x}
       y={attrs.y}
       draggable
@@ -89,6 +94,16 @@ const Photo = observer((props: PhotoProps) => {
       onDragEnd={handleDragEnd}
       onClick={handleClick}
     >
+      {isSelected && (
+        <Rect
+          x={-2}
+          y={-2}
+          width={attrs.width + 4}
+          height={attrs.height + 4}
+          stroke={'#000'}
+          strokeWidth={0.5}
+        />
+      )}
       <Image
         x={0}
         y={0}

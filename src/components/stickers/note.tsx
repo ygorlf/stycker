@@ -63,6 +63,28 @@ const Note = observer((props: NoteProps) => {
     });
   }
 
+  const handleTransformEnd = (e: any) => { // eslint-disable-line
+    e.cancelBubble = true;
+
+    const shape = e.target;
+
+    const attrs = stickersStore.stickers.get(props.id);
+
+    // Konva transform changes node scale, so we need to calc the new size based on that
+    const scaleX = shape.scaleX();
+    const scaleY = shape.scaleY();
+
+    // Reset scale it's crucial before update state so the new size can be read from state
+    shape.scaleX(1);
+    shape.scaleY(1);
+
+    stickersStore.updateStickerSize({
+      id: props.id,
+      width: attrs?.width * scaleX,
+      height: attrs?.height * scaleY,
+    });
+  }
+
   const attrs = stickersStore.stickers.get(props.id);
 
   if (!attrs) return null;
@@ -77,6 +99,7 @@ const Note = observer((props: NoteProps) => {
 
   return (
     <Group
+      name={attrs.id}
       x={attrs.x}
       y={attrs.y}
       width={attrs.width}
@@ -94,6 +117,7 @@ const Note = observer((props: NoteProps) => {
       onDragEnd={handleDragEnd}
       onClick={handleClick}
       onDblClick={handleDoubleClick}
+      onTransformEnd={handleTransformEnd}
     >
       {isSelected && (
         <Rect

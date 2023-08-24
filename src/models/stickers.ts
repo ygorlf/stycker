@@ -142,6 +142,16 @@ export const StickersModel = types
           });
         }
       },
+      updateStickerSize(newAttrs: { id: string, width: number, height: number }) {
+        const reference = self.stickers.get(newAttrs.id);
+
+        if (reference) {
+          self.stickers.put({
+            ...reference,
+            ...newAttrs
+          });
+        }
+      },
       updateStickerText(newAttrs: { id: string, text: string }) {
         const reference = self.stickers.get(newAttrs.id);
 
