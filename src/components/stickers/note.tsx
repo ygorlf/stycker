@@ -80,8 +80,8 @@ const Note = observer((props: NoteProps) => {
 
     stickersStore.updateStickerSize({
       id: props.id,
-      width: attrs?.width * scaleX,
-      height: attrs?.height * scaleY,
+      width: attrs?.width || 1 * scaleX,
+      height: attrs?.height || 1 * scaleY,
     });
   }
 
