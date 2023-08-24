@@ -16,8 +16,6 @@ const Selection = observer(() => {
   const handleMouseDown = (e: any) => { // eslint-disable-line
     e.cancelBubble = true;
 
-    console.log('mouse down');
-
     const stage = e.target.getStage();
     const pos = stage.getPointerPosition();
 
@@ -35,8 +33,6 @@ const Selection = observer(() => {
 
   const handleMouseMove = (e: any) => { // eslint-disable-line
     if (!selectionArea.isActive) return;
-
-    console.log('mouse move');
 
     const stage = e.target.getStage();
     const pos = stage.getPointerPosition();
@@ -111,8 +107,6 @@ const Selection = observer(() => {
       height: 0
     });
   };
-
-  console.log('LISTENING: ', boardStore.boardMode);
 
   return (
     <Rect

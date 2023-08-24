@@ -2,7 +2,7 @@
 // @ts-nocheck
 
 import { useEffect, useRef } from 'react';
-import { Stage, Layer, Rect } from 'react-konva';
+import { Stage, Layer, Rect, Transformer } from 'react-konva';
 import { reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { nanoid } from 'nanoid';
@@ -32,12 +32,19 @@ const minScale = 1;  // You can adjust this value
 const maxScale = 8;    // You can adjust this value too
 const scaleBy = 1.05;
 
+const MIN_W = 75;
+const MIN_H = 75;
+
+const MAX_W = 250;
+const MAX_H = 250;
+
 const Whiteboard = observer(() => {
   const stageRef = useRef(null);
+  const transformerRef = useRef(null);
 
   const { boardStore, stickersStore } = useStore();
 
-  const { boardBounds, selectionArea } = boardStore;
+  const { boardBounds } = boardStore;
 
   const handleDragStart = (e) => {
     e.evt.stopPropagation();
@@ -258,9 +265,27 @@ const Whiteboard = observer(() => {
       }
     );
 
+    const selectedStickerReaction = reaction(
+      () => stickersStore.selectedStickers.length,
+      () => {
+        if (stickersStore.selectedStickers.length === 1) {
+          const node = stageRef.current.findOne(`.${selectedStickers[0].id}`);
+
+          transformerRef.current.nodes([node]);
+        }
+
+        if (stickersStore.selectedStickers.length === 0) {
+          transformerRef.current.nodes([]);
+        }
+
+        transformerRef.current.getLayer().draw();
+      }
+    );
+
     return () => {
       boardReaction();
       cursorReaction();
+      selectedStickerReaction();
     }
   });
 
@@ -336,6 +361,31 @@ const Whiteboard = observer(() => {
             fill='rgba(208, 156, 250, 0.2)'
             stroke="#D09CFA"
             strokeWidth={1 / boardBounds.scaleX}
+          />
+
+          <Transformer
+            ref={transformerRef}
+            boundBoxFunc={(oldBox, newBox) => {
+              if (newBox.width < MIN_W || newBox.height < MIN_H) {
+                return oldBox;
+              }
+              if (newBox.width > MAX_W || newBox.height > MAX_H) {
+                return oldBox;
+              }
+              return newBox;
+            }}
+            draggable={false}
+            rotateEnabled={false}
+            onDragStart={(e) => e.cancelBubble = true}
+            onDragMove={(e) => e.cancelBubble = true}
+            onDragEnd={(e) => e.cancelBubble = true}
+            enabledAnchors={['top-left', 'top-right', 'bottom-left', 'bottom-right']}
+            anchorStroke='#000'
+            anchorFill='#fff'
+            borderStroke='#000'
+            anchorStyleFunc={(anchor) => {
+              anchor.cornerRadius(10);
+            }}
           />
         </Layer>
 
