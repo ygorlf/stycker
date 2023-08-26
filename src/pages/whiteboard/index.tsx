@@ -266,10 +266,10 @@ const Whiteboard = observer(() => {
     );
 
     const selectedStickerReaction = reaction(
-      () => stickersStore.selectedStickers.length,
-      () => {
+      () => stickersStore.seledctedStickerId(),
+      (id) => {
         if (stickersStore.selectedStickers.length === 1) {
-          const node = stageRef.current.findOne(`.${selectedStickers[0].id}`);
+          const node = stageRef.current.findOne(`.${id}`);
 
           transformerRef.current.nodes([node]);
         }
@@ -404,6 +404,7 @@ const Whiteboard = observer(() => {
       <Zoom
         handleCenteredZoom={handleCenteredZoom}
       />
+      
     </div>
   );
 })

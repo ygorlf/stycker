@@ -93,6 +93,11 @@ export const StickersModel = types
         .filter(sticker => sticker.type === 'draw')
         .map(sticker => sticker.id);
     }),
+    seledctedStickerId: computedFn(function isSelectedUnderline() {
+      return self.selectedStickers.map((i: SelectedStickerType) => {
+        return i.id;
+      })[0]
+    }),
     isSelectedBold: computedFn(function isSelectedBold() {
       return self.selectedStickers.filter((i: SelectedStickerType) => {
         const sticker = self.stickers.get(i.id);

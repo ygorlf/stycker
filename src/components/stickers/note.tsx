@@ -70,6 +70,8 @@ const Note = observer((props: NoteProps) => {
 
     const attrs = stickersStore.stickers.get(props.id);
 
+    if (!attrs) return;
+
     // Konva transform changes node scale, so we need to calc the new size based on that
     const scaleX = shape.scaleX();
     const scaleY = shape.scaleY();
@@ -80,8 +82,8 @@ const Note = observer((props: NoteProps) => {
 
     stickersStore.updateStickerSize({
       id: props.id,
-      width: attrs?.width || 1 * scaleX,
-      height: attrs?.height || 1 * scaleY,
+      width: attrs?.width * scaleX,
+      height: attrs?.height * scaleY,
     });
   }
 
