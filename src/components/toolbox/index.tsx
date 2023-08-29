@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, MouseEvent } from 'react';
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 
@@ -213,9 +213,8 @@ const Toolbox = observer(() => {
     stickersStore.updateStickersFontStyle(stickersStore.selectedStickers, type);
   };
 
-  const handleFontSizeMenu = (e: MouseEvent) => {
+  const handleFontSizeMenu = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
-    console.log(e.clientX)
 
     setFontMenu({
       isOpen: !fontMenu.isOpen,
