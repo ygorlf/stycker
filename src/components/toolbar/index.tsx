@@ -72,6 +72,7 @@ const Toolbar = observer(() => {
       fill: null,
       text: null,
       path: null,
+      fontSize: 20,
       fontStyle: {
         bold: false,
         italic: false,
