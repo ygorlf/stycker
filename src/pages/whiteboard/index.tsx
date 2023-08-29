@@ -178,6 +178,7 @@ const Whiteboard = observer(() => {
         height: 125,
         text: 'New Note!',
         fill: '#FFFF88',
+        fontSize: 20,
         fontStyle: {
           bold: false,
           italic: false,

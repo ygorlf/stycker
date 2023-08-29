@@ -143,7 +143,7 @@ const Note = observer((props: NoteProps) => {
         width={attrs.width * 0.9}
         height={attrs.height}
         text={attrs.text || ''}
-        fontSize={20}
+        fontSize={attrs.fontSize}
         fill='#505050'
         fontFamily='Montserrat'
         fontStyle={`${attrs.fontStyle.italic ? 'italic' : ''} ${attrs.fontStyle.bold ? 'bold' : ''}`}

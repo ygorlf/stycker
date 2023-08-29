@@ -23,6 +23,7 @@ export const StickerModel = types.model('Sticker', {
   text: types.maybeNull(types.string),
   fill: types.maybeNull(types.string),
   fontStyle: FontStyleModel,
+  fontSize: types.number,
   base64: types.maybeNull(types.string),
   path: types.maybeNull(types.string)
 });
@@ -206,6 +207,18 @@ export const StickersModel = types
                 ...reference.fontStyle,
                 [type]: !apply,
               }
+            });
+          }
+        })
+      },
+      updateStickersFontSize(stickers: SelectedStickerType[], size: number) {
+        stickers.forEach((sticker) => {
+          const reference = self.stickers.get(sticker.id);
+
+          if (reference) {
+            self.stickers.put({
+              ...reference,
+              fontSize: size
             });
           }
         })

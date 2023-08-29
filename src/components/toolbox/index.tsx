@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 
@@ -15,6 +16,10 @@ interface ColorItemProps {
   background: string;
 }
 
+interface Menu {
+  isOpen: boolean;
+}
+
 interface FontButtonProps {
   icon: any; // eslint-disable-line
 }
@@ -22,6 +27,10 @@ interface FontButtonProps {
 interface FontOption {
   id: number;
   type: 'bold' | 'italic' | 'underline';
+}
+
+interface SizeItemProps {
+  isSelected: boolean;
 }
 
 const Container = styled.div`
@@ -55,6 +64,68 @@ const ColorItem = styled.li<ColorItemProps>`
   border-radius: 50%;
   cursor: pointer;
   background: ${props => props.background};
+`;
+
+const SizeContainer = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 1.75rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+`;
+
+const SizeOption = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2rem;
+  height: 100%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font: 400 1.2rem 'Open Sans', sans-serif;
+`;
+
+const SizeList = styled.ul`
+  position: absolute;
+  top: 1.3rem;
+  left: -0.75rem;
+  width: 3.5rem;
+  max-height: 300px;
+  padding: 0 1rem;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  overflow-y: scroll;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+  background: snow;
+
+  &::-webkit-scrollbar {
+    width: 2px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: snow;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #D09CFA;
+    border: 1px solid #D09CFA;
+  }
+`;
+
+const SizeItem = styled.li<SizeItemProps>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 2rem;
+  cursor: pointer;
+  color: ${props => props.isSelected ? '#D09CFA' : '#505050'};
+  font: 400 0.9rem 'Open Sans', sans-serif;
+  font-weight: ${props => props.isSelected ? '700' : '400'};
 `;
 
 const FontButton = styled.button<FontButtonProps>`
@@ -93,6 +164,20 @@ const COLORS = [
   '#FFFF88'
 ];
 
+const SIZES = [
+  8,
+  12,
+  16,
+  20,
+  24,
+  30,
+  36,
+  48,
+  60,
+  72,
+  96
+];
+
 const FONT_OPTIONS: FontOption[] = [
   {
     id: 1,
@@ -109,6 +194,10 @@ const FONT_OPTIONS: FontOption[] = [
 ];
 
 const Toolbox = observer(() => {
+  const [fontMenu, setFontMenu] = useState<Menu>({
+    isOpen: false,
+  });
+
   const { stickersStore } = useStore();
 
   const handleColorChange = (color: string) => {
@@ -124,8 +213,17 @@ const Toolbox = observer(() => {
     stickersStore.updateStickersFontStyle(stickersStore.selectedStickers, type);
   };
 
+  const handleFontSizeMenu = (e: MouseEvent) => {
+    e.stopPropagation();
+    console.log(e.clientX)
+
+    setFontMenu({
+      isOpen: !fontMenu.isOpen,
+    });
+  };
+
   const getFontIcon = (type: string) => {
-    const isActive =  getFontActive(type);
+    const isActive = getFontActive(type);
     switch (type) {
       case 'bold':
         return isActive ? boldActive : bold;
@@ -168,6 +266,24 @@ const Toolbox = observer(() => {
     ))
   }
 
+  const renderFonSizes = () => {
+    const selectedFontSize = stickersStore.stickers.get(
+      stickersStore.selectedStickers[0].id
+    )?.fontSize
+
+    return SIZES.map((size: number) => (
+      <SizeItem
+        onClick={() => {
+          stickersStore.updateStickersFontSize(stickersStore.selectedStickers, size);
+          setFontMenu({ isOpen: false });
+        }}
+        isSelected={selectedFontSize === size}
+      >
+        {size}
+      </SizeItem>
+    ))
+  }
+
   const renderFontOptions = () => {
     return FONT_OPTIONS.map((font: FontOption) => (
       <FontButton
@@ -178,11 +294,28 @@ const Toolbox = observer(() => {
     ))
   }
 
+  const selectedFontSize = stickersStore.stickers.get(
+    stickersStore.selectedStickers[0].id
+  )?.fontSize
+
   return (
     <Container>
       <List>
         {renderColors()}
       </List>
+      <Separator />
+      <SizeContainer>
+        <SizeOption
+          onClick={handleFontSizeMenu}
+        >
+          {selectedFontSize}
+        </SizeOption>
+        {fontMenu.isOpen && (
+          <SizeList>
+            {renderFonSizes()}
+          </SizeList>
+        )}
+      </SizeContainer>
       <Separator />
       <List>
         {renderFontOptions()}

@@ -69,6 +69,7 @@ const DrawLayer = observer(() => {
       fill: '#000',
       path,
       base64: null,
+      fontSize: 20,
       fontStyle: {
         bold: false,
         italic: false,
