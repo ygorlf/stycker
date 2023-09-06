@@ -85,6 +85,8 @@ const Note = observer((props: NoteProps) => {
       width: attrs?.width * scaleX,
       height: attrs?.height * scaleY,
     });
+
+    stickersStore.updateSelectedStickers([]);
   }
 
   const attrs = stickersStore.stickers.get(props.id);
