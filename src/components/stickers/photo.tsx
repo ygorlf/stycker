@@ -1,15 +1,28 @@
+import { useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Group, Rect, Text } from 'react-konva';
+import { Group, Image, Rect } from 'react-konva';
 
 // Store
 import { useStore } from '../../models/root';
 
-interface NoteProps {
+interface PhotoProps {
   id: string;
 }
 
-const Note = observer((props: NoteProps) => {
+const Photo = observer((props: PhotoProps) => {
+  const [imageData, setImage] = useState<undefined | CanvasImageSource>(undefined);
+
   const { boardStore, stickersStore } = useStore();
+
+  const setupImage = (image: string) => {
+    const resource = new window.Image();
+
+    resource.onload = () => {
+      setImage(resource);
+    };
+
+    resource.src = image;
+  }
 
   const handleClick = (e: any) => { // eslint-disable-line
     e.cancelBubble = true;
@@ -21,22 +34,6 @@ const Note = observer((props: NoteProps) => {
       id: props.id,
       ...pos,
     }]);
-  };
-
-  const handleDoubleClick = (e: any) => { // eslint-disable-line
-    e.cancelBubble = true;
-
-    const attrs = stickersStore.stickers.get(props.id);
-
-    const pos = e.target.parent.getAbsolutePosition(); // Get the absolute position of the group, by defaukt the text element will be the target
-
-    stickersStore.updateSelectedStickers([]);
-
-    stickersStore.setEditableSticker({
-      id: props.id,
-      text: attrs?.text,
-      ...pos,
-    });
   };
 
   const handleDragStart = (e: any) => { // eslint-disable-line
@@ -63,33 +60,11 @@ const Note = observer((props: NoteProps) => {
     });
   }
 
-  const handleTransformEnd = (e: any) => { // eslint-disable-line
-    e.cancelBubble = true;
-
-    const shape = e.target;
-
-    const attrs = stickersStore.stickers.get(props.id);
-
-    if (!attrs) return;
-
-    // Konva transform changes node scale, so we need to calc the new size based on that
-    const scaleX = shape.scaleX();
-    const scaleY = shape.scaleY();
-
-    // Reset scale it's crucial before update state so the new size can be read from state
-    shape.scaleX(1);
-    shape.scaleY(1);
-
-    stickersStore.updateStickerSize({
-      id: props.id,
-      width: attrs?.width * scaleX,
-      height: attrs?.height * scaleY,
-    });
-
-    stickersStore.updateSelectedStickers([]);
-  }
-
   const attrs = stickersStore.stickers.get(props.id);
+
+  useEffect(() => {
+    setupImage(attrs?.base64 || '');
+  }, []); // eslint-disable-line
 
   if (!attrs) return null;
 
@@ -106,8 +81,6 @@ const Note = observer((props: NoteProps) => {
       name={attrs.id}
       x={attrs.x}
       y={attrs.y}
-      width={attrs.width}
-      height={attrs.height}
       draggable
       listening={isListening}
       onMouseEnter={() => {
@@ -120,8 +93,6 @@ const Note = observer((props: NoteProps) => {
       onDragMove={handleDragMove}
       onDragEnd={handleDragEnd}
       onClick={handleClick}
-      onDblClick={handleDoubleClick}
-      onTransformEnd={handleTransformEnd}
     >
       {isSelected && (
         <Rect
@@ -133,28 +104,15 @@ const Note = observer((props: NoteProps) => {
           strokeWidth={0.5}
         />
       )}
-      <Rect
+      <Image
         x={0}
         y={0}
         width={attrs.width}
         height={attrs.height}
-        fill={attrs.fill || ''}
-      />
-      <Text
-        x={attrs.width * 0.05}
-        width={attrs.width * 0.9}
-        height={attrs.height}
-        text={attrs.text || ''}
-        fontSize={attrs.fontSize}
-        fill='#505050'
-        fontFamily='Montserrat'
-        fontStyle={`${attrs.fontStyle.italic ? 'italic' : ''} ${attrs.fontStyle.bold ? 'bold' : ''}`}
-        align='center'
-        textDecoration={attrs.fontStyle.underline ? 'underline' : 'normal'}
-        verticalAlign='middle'
+        image={imageData}
       />
     </Group>
   )
 });
 
-export default Note;
+export default Photo;
